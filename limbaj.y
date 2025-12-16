@@ -6,18 +6,16 @@
 %{
 #include <iostream>
 #include <cstdlib>
-#include "SymTable.h"
 extern FILE* yyin;
 extern char* yytext;
 extern int yylineno;
 extern int yylex();
 void yyerror(const char * s);
-class SymTable* current;
 int errorCount = 0;
 %}
 
 %union {
-     std::string* Str;
+     string* Str;
      int Int;
      float Float;
 }
@@ -52,16 +50,8 @@ global_declarations :  decl
 	      ;
 
 decl       :  TYPE ID ';' { 
-                              if(!current->existsId($2)) {
-                                    current->addVar($1,$2);
-                                    delete $1;
-                                    delete $2;
-                              } else {
-                                   errorCount++; 
-                                   yyerror("Variable already defined");
-                                   delete $1;
-                                   delete $2;
-                              }
+                              delete $1;
+                              delete $2;
                           }
               | TYPE ID  LEFTP list_param RIGHTP ';'
                {
@@ -196,9 +186,6 @@ void yyerror(const char * s){
 
 int main(int argc, char** argv){
      yyin=fopen(argv[1],"r");
-     current = new SymTable("global");
      yyparse();
-     cout << "Variables:" <<endl;
-     current->printVars();
-     delete current;
+     return (errorCount == 0) ? 0 : 1;
 } 

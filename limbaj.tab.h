@@ -107,9 +107,9 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 19 "limbaj.y"
+#line 17 "limbaj.y"
 
-     std::string* Str;
+     string* Str;
      int Int;
      float Float;
 

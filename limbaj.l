@@ -47,19 +47,16 @@ STRING_LIT \"([^\\\"]|\\.)*\"
 "{" {return LEFTB;}
 "}" {return RIGHTB;}
 
-{FLOAT_NUMBER} 
-{
+{FLOAT_NUMBER} {
     yylval.Float=(float)atof(yytext);
     return FLOAT_NR;
 }
-{INT_NUMBER}
-{
+{INT_NUMBER} {
     yylval.Int=(int)atoi(yytext);
     return INT_NR;
 }
 
-{STRING_LIT}
-{
+{STRING_LIT} {
     yylval.Str=new string(yytext);
     return STRING_S;
 }
