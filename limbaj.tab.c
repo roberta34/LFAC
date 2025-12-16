@@ -71,16 +71,14 @@
 
 #include <iostream>
 #include <cstdlib>
-#include "SymTable.h"
 extern FILE* yyin;
 extern char* yytext;
 extern int yylineno;
 extern int yylex();
 void yyerror(const char * s);
-class SymTable* current;
 int errorCount = 0;
 
-#line 84 "limbaj.tab.c"
+#line 82 "limbaj.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -559,12 +557,12 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    47,    47,    50,    51,    54,    66,    71,    77,    78,
-      81,    88,    88,    90,    95,   100,   105,   112,   113,   114,
-     117,   121,   122,   125,   126,   127,   128,   129,   132,   138,
-     142,   148,   149,   152,   153,   156,   159,   161,   162,   163,
-     164,   165,   166,   167,   172,   173,   174,   175,   176,   177,
-     180,   181,   182,   183,   184,   185,   186,   187,   188,   189
+       0,    45,    45,    48,    49,    52,    56,    61,    67,    68,
+      71,    78,    78,    80,    85,    90,    95,   102,   103,   104,
+     107,   111,   112,   115,   116,   117,   118,   119,   122,   128,
+     132,   138,   139,   142,   143,   146,   149,   151,   152,   153,
+     154,   155,   156,   157,   162,   163,   164,   165,   166,   167,
+     170,   171,   172,   173,   174,   175,   176,   177,   178,   179
 };
 #endif
 
@@ -1216,138 +1214,130 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: global_declarations main_block  */
-#line 47 "limbaj.y"
+#line 45 "limbaj.y"
                                           {if (errorCount == 0) cout<< "The program is correct!" << endl;}
-#line 1222 "limbaj.tab.c"
+#line 1220 "limbaj.tab.c"
     break;
 
   case 5: /* decl: TYPE ID ';'  */
-#line 54 "limbaj.y"
+#line 52 "limbaj.y"
                           { 
-                              if(!current->existsId((yyvsp[-1].Str))) {
-                                    current->addVar((yyvsp[-2].Str),(yyvsp[-1].Str));
-                                    delete (yyvsp[-2].Str);
-                                    delete (yyvsp[-1].Str);
-                              } else {
-                                   errorCount++; 
-                                   yyerror("Variable already defined");
-                                   delete (yyvsp[-2].Str);
-                                   delete (yyvsp[-1].Str);
-                              }
+                              delete (yyvsp[-2].Str);
+                              delete (yyvsp[-1].Str);
                           }
-#line 1239 "limbaj.tab.c"
+#line 1229 "limbaj.tab.c"
     break;
 
   case 6: /* decl: TYPE ID LEFTP list_param RIGHTP ';'  */
-#line 67 "limbaj.y"
+#line 57 "limbaj.y"
                {
                     delete (yyvsp[-5].Str);
                     delete (yyvsp[-4].Str);
                }
-#line 1248 "limbaj.tab.c"
+#line 1238 "limbaj.tab.c"
     break;
 
   case 7: /* decl: CLASS ID LEFTB class_body RIGHTB ';'  */
-#line 72 "limbaj.y"
+#line 62 "limbaj.y"
                {
                     delete (yyvsp[-4].Str);
                }
-#line 1256 "limbaj.tab.c"
+#line 1246 "limbaj.tab.c"
     break;
 
   case 10: /* param: TYPE ID  */
-#line 82 "limbaj.y"
+#line 72 "limbaj.y"
           {
                delete (yyvsp[-1].Str);
                delete (yyvsp[0].Str);
           }
-#line 1265 "limbaj.tab.c"
+#line 1255 "limbaj.tab.c"
     break;
 
   case 13: /* class_member: TYPE ID ';'  */
+#line 81 "limbaj.y"
+               {
+                    delete (yyvsp[-2].Str);
+                    delete (yyvsp[-1].Str);
+               }
+#line 1264 "limbaj.tab.c"
+    break;
+
+  case 14: /* class_member: TYPE ID LEFTP list_param RIGHTP ';'  */
+#line 86 "limbaj.y"
+               {
+                    delete (yyvsp[-5].Str);
+                    delete (yyvsp[-4].Str);
+               }
+#line 1273 "limbaj.tab.c"
+    break;
+
+  case 15: /* class_member: acces_specifier TYPE ID ';'  */
 #line 91 "limbaj.y"
                {
                     delete (yyvsp[-2].Str);
                     delete (yyvsp[-1].Str);
                }
-#line 1274 "limbaj.tab.c"
-    break;
-
-  case 14: /* class_member: TYPE ID LEFTP list_param RIGHTP ';'  */
-#line 96 "limbaj.y"
-               {
-                    delete (yyvsp[-5].Str);
-                    delete (yyvsp[-4].Str);
-               }
-#line 1283 "limbaj.tab.c"
-    break;
-
-  case 15: /* class_member: acces_specifier TYPE ID ';'  */
-#line 101 "limbaj.y"
-               {
-                    delete (yyvsp[-2].Str);
-                    delete (yyvsp[-1].Str);
-               }
-#line 1292 "limbaj.tab.c"
+#line 1282 "limbaj.tab.c"
     break;
 
   case 16: /* class_member: acces_specifier TYPE ID LEFTP list_param RIGHTP ';'  */
-#line 106 "limbaj.y"
+#line 96 "limbaj.y"
                  {
                     delete (yyvsp[-5].Str);
                     delete (yyvsp[-4].Str);
                  }
-#line 1301 "limbaj.tab.c"
+#line 1291 "limbaj.tab.c"
     break;
 
   case 28: /* assign: ID ASSIGN expression  */
-#line 133 "limbaj.y"
+#line 123 "limbaj.y"
           {
                delete (yyvsp[-2].Str);
           }
-#line 1309 "limbaj.tab.c"
+#line 1299 "limbaj.tab.c"
     break;
 
   case 29: /* function_call: ID LEFTP call_parametres RIGHTP  */
-#line 139 "limbaj.y"
+#line 129 "limbaj.y"
                {
                     delete (yyvsp[-3].Str);
                }
-#line 1317 "limbaj.tab.c"
+#line 1307 "limbaj.tab.c"
     break;
 
   case 30: /* function_call: ID DOT ID LEFTP call_parametres RIGHTP  */
-#line 143 "limbaj.y"
+#line 133 "limbaj.y"
                {
                     delete (yyvsp[-5].Str);
                     delete (yyvsp[-3].Str);
                }
-#line 1326 "limbaj.tab.c"
+#line 1316 "limbaj.tab.c"
     break;
 
   case 39: /* expression: STRING_S  */
-#line 163 "limbaj.y"
+#line 153 "limbaj.y"
                      {delete (yyvsp[0].Str);}
-#line 1332 "limbaj.tab.c"
+#line 1322 "limbaj.tab.c"
     break;
 
   case 42: /* expression: ID  */
-#line 166 "limbaj.y"
+#line 156 "limbaj.y"
                {delete (yyvsp[0].Str);}
-#line 1338 "limbaj.tab.c"
+#line 1328 "limbaj.tab.c"
     break;
 
   case 43: /* expression: ID DOT ID  */
-#line 168 "limbaj.y"
+#line 158 "limbaj.y"
                {
                     delete (yyvsp[-2].Str);
                     delete (yyvsp[0].Str);
                }
-#line 1347 "limbaj.tab.c"
+#line 1337 "limbaj.tab.c"
     break;
 
 
-#line 1351 "limbaj.tab.c"
+#line 1341 "limbaj.tab.c"
 
       default: break;
     }
@@ -1540,7 +1530,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 192 "limbaj.y"
+#line 182 "limbaj.y"
 
 void yyerror(const char * s){
      cout << "error:" << s << " at line: " << yylineno << endl;
@@ -1548,9 +1538,6 @@ void yyerror(const char * s){
 
 int main(int argc, char** argv){
      yyin=fopen(argv[1],"r");
-     current = new SymTable("global");
      yyparse();
-     cout << "Variables:" <<endl;
-     current->printVars();
-     delete current;
+     return (errorCount == 0) ? 0 : 1;
 } 
