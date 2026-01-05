@@ -1,0 +1,7 @@
+begin_program
+integer f(integer x);
+begin_main
+declare x;
+x <- f();
+end_main
+end_program

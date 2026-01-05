@@ -1,0 +1,13 @@
+begin_program
+integer a;
+integer b;
+integer c;
+begin_main
+declare a;
+declare b;
+a <- 1;
+b <- 2;
+c <- a + b;
+Print(c);
+end_main
+end_program

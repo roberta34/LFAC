@@ -1,0 +1,9 @@
+begin_program
+begin_class A {
+}
+end_class
+begin_main
+declare x;
+x <- 1;
+end_main
+end_program

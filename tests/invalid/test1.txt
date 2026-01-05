@@ -1,0 +1,6 @@
+begin_program
+integer x;
+begin_main
+declare x;
+x <- 3;
+end_program

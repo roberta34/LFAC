@@ -17,20 +17,20 @@ STRING_LIT \"([^\\\"]|\\.)*\"
 "begin_program" {return BPROGRAM;}
 "end_program" {return EPROGRAM;}
 "begin_main" {return BMAIN;}
-"end_main" {return EMAIN};
-"if" {return BIF;}
-"then" {return THEN};
-"else" {return ELSE;}
-"endif" {return EIF};
-"while" {return BWHILE;}
-"do" {return DO};
-"endwhile" {return EWHILE};
-"for" {return BFOR};
-"from" {return FROM};
-"to" {return TO};
-"endfor" {return EFOR};
-"declare" {return DECLARE;}
+"end_main" {return EMAIN;}
 "<-" {return ASSIGN;}
+"if" {return BIF;}
+"then" {return THEN;}
+"else" {return ELSE;}
+"endif" {return EIF;}
+"while" {return BWHILE;}
+"do" {return DO;}
+"endwhile" {return EWHILE;}
+"for" {return BFOR;}
+"from" {return FROM;}
+"to" {return TO;}
+"endfor" {return EFOR;}
+"declare" {return DECLARE;}
 "true" {return TRUE;}
 "false" {return FALSE;}
 "and" {return AND;}  
@@ -46,15 +46,13 @@ STRING_LIT \"([^\\\"]|\\.)*\"
 "-" {return MINUS;}
 "*" {return MUL;}
 "/" {return DIV;}
-"class" {return BCLASS;}
-"endclass" {return ECLASS};
+"begin_class" {return BCLASS;}
+"end_class" {return ECLASS;}
 "private" {return PRIVATE;}
 "public" {return PUBLIC;}
 "protected" {return PROTECTED;}
-"method" {return BMETHOD};
-"endmethod" {return EMETHOD};
-"new" {return NEW};
-"return" {return RETURN};
+"new" {return NEW; }
+"return" {return RETURN; }
 "Print" {return PRINT;}
 "." {return DOT;}
 "," {return COMMA;}
@@ -65,7 +63,7 @@ STRING_LIT \"([^\\\"]|\\.)*\"
 
 {FLOAT_NUMBER} {
     yylval.Float=(float)atof(yytext);
-    return FLOAT_NR;
+   return FLOAT_NR;
 }
 {INT_NUMBER} {
     yylval.Int=(int)atoi(yytext);
