@@ -197,6 +197,9 @@ expression: INT_NR
           | expression MUL expression
           | expression DIV expression
           | LEFTP expression RIGHTP
+          | expression AND expression
+          | expression OR expression
+          | NOT expression
           ;
 
 while_statement: BWHILE bool_expression DO list EWHILE
