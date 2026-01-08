@@ -3,7 +3,7 @@ begin_class A {
 }
 end_class
 begin_main
-declare x;
+initialize x;
 x <- 1;
 end_main
 end_program

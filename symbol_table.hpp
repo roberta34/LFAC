@@ -49,7 +49,7 @@ class SymbolTable {
         SymbolTable* getParent() const;
 
         SymbolTable* createChild(string childName);
-        void addVariable(string& name, const string& type, const string& value="-");
+        void addVariable(const string& name, const string& type, const string& value="-");
         void addFunction(const string& name, const string& returnType, const vector<Parameter>& params);
         void addClass(const string& name);
 

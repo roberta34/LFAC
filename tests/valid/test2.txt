@@ -1,7 +1,7 @@
 begin_program
 integer x;
 begin_main
-declare x;
+initialize x;
 x <- 0;
 while x < 3 do
 x <- x + 1;

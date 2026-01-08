@@ -30,7 +30,7 @@ STRING_LIT \"([^\\\"]|\\.)*\"
 "from" {return FROM;}
 "to" {return TO;}
 "endfor" {return EFOR;}
-"declare" {return DECLARE;}
+"initialize" {return INITIALIZE;}
 "true" {return TRUE;}
 "false" {return FALSE;}
 "and" {return AND;}  

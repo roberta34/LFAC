@@ -3,7 +3,7 @@ integer a;
 integer b;
 integer c;
 begin_main
-declare a;
+initialize a;
 declare b;
 a <- 1;
 b <- 2;

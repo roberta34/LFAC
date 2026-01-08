@@ -1,7 +1,7 @@
 begin_program
 integer f();
 begin_main
-declare x;
+initiliaze x;
 x <- 1;
 end_main
 end_program

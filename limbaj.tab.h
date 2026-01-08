@@ -48,9 +48,11 @@ extern int yydebug;
 #line 1 "limbaj.y"
 
   #include <string>
+  #include <vector>
   using namespace std;
+  #include "symbol_table.hpp"
 
-#line 54 "limbaj.tab.h"
+#line 56 "limbaj.tab.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -77,7 +79,7 @@ extern int yydebug;
     FROM = 271,                    /* FROM  */
     TO = 272,                      /* TO  */
     EFOR = 273,                    /* EFOR  */
-    DECLARE = 274,                 /* DECLARE  */
+    INITIALIZE = 274,              /* INITIALIZE  */
     TRUE = 275,                    /* TRUE  */
     FALSE = 276,                   /* FALSE  */
     AND = 277,                     /* AND  */
@@ -121,13 +123,14 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 17 "limbaj.y"
+#line 24 "limbaj.y"
 
      string* Str;
      int Int;
      float Float;
+     vector<Parameter>* Params;
 
-#line 131 "limbaj.tab.h"
+#line 134 "limbaj.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

@@ -1,23 +1,31 @@
 %code requires {
   #include <string>
+  #include <vector>
   using namespace std;
+  #include "symbol_table.hpp"
 }
 
 %{
 #include <iostream>
+#include <fstream>
 #include <cstdlib>
+#include "symbol_table.hpp"
 extern FILE* yyin;
 extern char* yytext;
 extern int yylineno;
 extern int yylex();
 void yyerror(const char * s);
 int errorCount = 0;
+
+SymbolTable* globalScope=nullptr;
+SymbolTable* currentScope=nullptr;
 %}
 
 %union {
      string* Str;
      int Int;
      float Float;
+     vector<Parameter>* Params;
 }
 
 
@@ -27,7 +35,7 @@ int errorCount = 0;
 %token BIF THEN ELSE EIF 
 %token BWHILE DO EWHILE
 %token BFOR FROM TO EFOR
-%token DECLARE
+%token INITIALIZE
 %token TRUE FALSE
 %token AND OR NOT
 %token EQ NEQ LE GE LT GT 
@@ -40,6 +48,8 @@ int errorCount = 0;
 %token<Str> ID TYPE STRING_S
 %token<Int> INT_NR
 %token<Float> FLOAT_NR 
+
+%type<Params> list_param
 
 %start program
 
@@ -60,43 +70,86 @@ global_declarations :  decl
 	      ;
 
 decl       :  TYPE ID ';' { 
+                              currentScope->addVariable(*$2,*$1,"-");
                               delete $1;
                               delete $2;
                           }
               | TYPE ID  LEFTP list_param RIGHTP ';'
                {
+                    vector<Parameter> params = *$4;
+
+                    currentScope->addFunction(*$2, *$1, params);
+
+                    SymbolTable* saved = currentScope;
+                    currentScope = currentScope->createChild("function " + *$2);
+
+                    for (const auto& p : params) {
+                    currentScope->addVariable(p.name, p.type, "-");
+                    }
+
+                    currentScope = saved;
+
                     delete $1;
                     delete $2;
+                    delete $4;
                }
-              | BCLASS ID LEFTB class_body RIGHTB ECLASS 
+              | BCLASS ID 
                {
+
+                    currentScope->addClass(*$2);
+                    currentScope=currentScope->createChild("class "+*$2);
+               }
+               LEFTB class_body RIGHTB ECLASS 
+               {
+                    currentScope=currentScope->getParent();
                     delete $2;
                }
            ;
 
-list_param : param
-            | list_param COMMA param 
+list_param : TYPE ID 
+               {
+                    $$=new vector<Parameter>();
+                    $$->push_back({*$1,*$2});
+                    delete $1;
+                    delete $2;
+               }
+            | list_param COMMA TYPE ID
+               {
+                    $$=$1;
+                    $$->push_back({*$3,*$4});
+                    delete $3;
+                    delete $4;
+               }
             ;
             
-param : TYPE ID 
-          {
-               delete $1;
-               delete $2;
-          }
-      ; 
+
       
 class_body : class_body class_member | class_member ;
 
 class_member : TYPE ID ';'
                {
+                    currentScope->addVariable(*$2,*$1,"-");
                     delete $1;
                     delete $2;
                }
                
               | TYPE ID LEFTP list_param RIGHTP ';'
                {
+                    vector<Parameter> params=*$4;
+
+                    currentScope->addFunction(*$2, *$1, params);
+
+                    SymbolTable* saved=currentScope;
+                    currentScope=currentScope->createChild("function "+*$2);
+
+                    for(const auto& p : params) {
+                         currentScope->addVariable(p.name, p.type, "-");
+                    }
+                    currentScope=saved;
+
                     delete $1;
                     delete $2;
+                    delete $4;
                }
               | acces_specifier TYPE ID ';'
                {
@@ -140,8 +193,9 @@ assign : ID ASSIGN expression
           }
         ;  
 
-declaration: DECLARE ID
+declaration: INITIALIZE ID
           {
+               currentScope->addVariable(*$2,"unknown","-");
                delete $2;
           }
         ;
@@ -224,6 +278,16 @@ void yyerror(const char * s){
 
 int main(int argc, char** argv){
      yyin=fopen(argv[1],"r");
+
+     globalScope=new SymbolTable("global", nullptr);
+     currentScope=globalScope;
      yyparse();
+     ofstream fout("tables.txt");
+     if(fout.is_open()) {
+          globalScope->printAll(fout);
+          fout.close();
+     }
+
+     delete globalScope;
      return (errorCount == 0) ? 0 : 1;
 } 

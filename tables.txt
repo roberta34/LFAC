@@ -1,0 +1,5 @@
+Scope: global
+  class A
+
+  Scope: class A (parent: global)
+
