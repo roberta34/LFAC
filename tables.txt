@@ -1,0 +1,51 @@
+Scope: global
+  class A
+  function f -> integer(integer z)
+  class B
+  function bfunc -> text(bool b, text s)
+  var fx : float = -
+  var s : text = -
+  var ix : integer = -
+  var b1 : bool = -
+  var b2 : bool = -
+  var obb : B = object
+  var oba : A = object
+
+  Scope: class A (parent: global)
+    var x : integer = -
+    var y : integer = -
+    function A -> void()
+    function g -> integer(integer z)
+
+    Scope: function A (parent: class A)
+
+    Scope: function g (parent: class A)
+      var z : integer = -
+
+  Scope: function f (parent: global)
+    var z : integer = -
+    var x : integer = -
+    var b : integer = -
+    var flag : bool = -
+
+  Scope: class B (parent: global)
+    var b : integer = -
+    var bb : integer = -
+    function B -> void()
+    function g -> integer(integer z)
+    function f -> integer(integer z)
+
+    Scope: function B (parent: class B)
+
+    Scope: function g (parent: class B)
+      var z : integer = -
+      var a : A = object
+      var x : integer = -
+
+    Scope: function f (parent: class B)
+      var z : integer = -
+
+  Scope: function bfunc (parent: global)
+    var b : bool = -
+    var s : text = -
+

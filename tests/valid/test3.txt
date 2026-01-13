@@ -1,0 +1,9 @@
+begin_program
+integer i;
+begin_main
+initialize i;
+for i from 1 to 3 do
+Print(i);
+endfor;
+end_main
+end_program

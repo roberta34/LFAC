@@ -1,53 +1,30 @@
 %code requires {
   #include <string>
-<<<<<<< HEAD
-  using namespace std;
-=======
   #include <vector>
   using namespace std;
   #include "symbol_table.hpp"
->>>>>>> 6b12b73 (Modificari carina)
 }
 
 %{
 #include <iostream>
-<<<<<<< HEAD
-#include <cstdlib>
-=======
 #include <fstream>
 #include <cstdlib>
 #include "symbol_table.hpp"
->>>>>>> 6b12b73 (Modificari carina)
 extern FILE* yyin;
 extern char* yytext;
 extern int yylineno;
 extern int yylex();
 void yyerror(const char * s);
 int errorCount = 0;
-<<<<<<< HEAD
-=======
 
 SymbolTable* globalScope=nullptr;
 SymbolTable* currentScope=nullptr;
->>>>>>> 6b12b73 (Modificari carina)
 %}
 
 %union {
      string* Str;
      int Int;
      float Float;
-<<<<<<< HEAD
-}
-
-//%destructor { delete $$; } <Str> 
-
-%token BGIN END ASSIGN IF ELSE WHILE CLASS PRIVATE PUBLIC PROTECTED
-%token PLUS MINUS MUL DIV DOT COMMA 
-%token LEFTP RIGHTP LEFTB RIGHTB
-%token PRINT TRUE FALSE
-%token AND OR NOT 
-%token EQ NEQ LE GE LT GT
-=======
      vector<Parameter>* Params;
 }
 
@@ -68,22 +45,16 @@ SymbolTable* currentScope=nullptr;
 %token DOT COMMA
 %token LEFTP RIGHTP LEFTB RIGHTB
 %token PRINT
->>>>>>> 6b12b73 (Modificari carina)
 %token<Str> ID TYPE STRING_S
 %token<Int> INT_NR
 %token<Float> FLOAT_NR 
 
-<<<<<<< HEAD
-%start program
-=======
 %type<Str> expression
-%type<Str> function_call
 %type<Params> call_parametres
 %type<Params> list_param
 
 %start program
 
->>>>>>> 6b12b73 (Modificari carina)
 %left OR 
 %left AND
 %right NOT
@@ -93,48 +64,14 @@ SymbolTable* currentScope=nullptr;
 %right UMINUS
 
 %%
-<<<<<<< HEAD
-program :  global_declarations main_block {if (errorCount == 0) cout<< "The program is correct!" << endl;}
-      ;
-
-global_declarations :  decl       
-	      |  global_declarations decl    
-	      ;
-
-decl       :  TYPE ID ';' { 
-                              delete $1;
-                              delete $2;
-                          }
-              | TYPE ID  LEFTP list_param RIGHTP ';'
-               {
-                    delete $1;
-                    delete $2;
-               }
-              | CLASS ID LEFTB class_body RIGHTB ';'
-               {
-                    delete $2;
-               }
-           ;
-
-list_param : param
-            | list_param COMMA param 
-            ;
-            
-param : TYPE ID 
-          {
-               delete $1;
-               delete $2;
-          }
-      ; 
-=======
 program : BPROGRAM global_declarations main_block EPROGRAM {if (errorCount == 0) cout<< "The program is correct!" << endl;}
       ;
 
-global_declarations :  decl { currentScope=globalScope; }
-	      |  global_declarations decl   
+global_declarations :  decl  
+	      |  global_declarations decl    
 	      ;
 
-decl       :  TYPE ID ';' {   if(currentScope->lookupLocal(*$2) != nullptr){
+decl       :  TYPE ID ';' {   if(currentScope->lookupLocal(*$2)){
                                    cout<<"Eroare de semantica: variabila '"<<*$2<<"' este deja declarata la linia "<<yylineno<<endl;
                                    errorCount++;
                               }
@@ -154,10 +91,12 @@ decl       :  TYPE ID ';' {   if(currentScope->lookupLocal(*$2) != nullptr){
                     else {
                          vector<Parameter> params; 
                          currentScope->addFunction(*$2, *$1, params);
-                         
+                         SymbolTable* saved = currentScope;
+                         currentScope = currentScope->createChild("function " + *$2);
+                         currentScope = saved;
                          delete $1;
                          delete $2;
-                         }
+                          }
           }
               | TYPE ID LEFTP list_param RIGHTP ';'
                {
@@ -170,33 +109,39 @@ decl       :  TYPE ID ';' {   if(currentScope->lookupLocal(*$2) != nullptr){
                          vector<Parameter> params = *$4;
 
                          currentScope->addFunction(*$2, *$1, params);
-                         delete $4;
+
+                         SymbolTable* saved = currentScope;
+                         SymbolTable* child = currentScope->createChild("function " + *$2);
+                         currentScope = child;
+                         
+                         for (const auto& p : params) {
+                         currentScope->addVariable(p.name, p.type, "-");
+                         }    
+                         currentScope = saved;
+
+                         delete $1;
+                         delete $2;
                     }
-                    delete $1;
-                    delete $2;
                }
-               | TYPE ID LEFTP RIGHTP LEFTB 
+               | TYPE ID LEFTP RIGHTP LEFTB list RIGHTB  
                {
-                     if(currentScope->lookupLocal(*$2)){
+                    if(currentScope->lookupLocal(*$2)){
                          cout<<"Eroare de semantica: functia '"<<*$2<<"' este deja declarata la linia "<<yylineno<<endl;
                          errorCount++;
                     } 
                     else {
                          vector<Parameter> params;
                          currentScope->addFunction(*$2, *$1, params);
-                         currentScope=currentScope->createChild("function "+*$2);
+                         SymbolTable* saved = currentScope;
+                         currentScope = currentScope->createChild("function " + *$2);
+                         currentScope = saved;
                          delete $1;
                          delete $2;
                          }
                }
-               list RIGHTB  
+               | TYPE ID  LEFTP list_param RIGHTP  LEFTB list RIGHTB
                {
-                    if(currentScope)
-                         currentScope=currentScope->getParent();
-               }
-               | TYPE ID  LEFTP list_param RIGHTP LEFTB 
-               {
-                     if(currentScope->lookupLocal(*$2)){
+                    if(currentScope->lookupLocal(*$2)){
                                    cout<<"Eroare de semantica: functia '"<<*$2<<"' este deja declarata la linia "<<yylineno<<endl;
                                    errorCount++;
                               }
@@ -206,20 +151,19 @@ decl       :  TYPE ID ';' {   if(currentScope->lookupLocal(*$2) != nullptr){
 
                          currentScope->addFunction(*$2, *$1, params);
 
+                         SymbolTable* saved = currentScope;
                          currentScope = currentScope->createChild("function " + *$2);
 
                          for (const auto& p : params) {
-                              currentScope->addVariable(p.name, p.type, "-");
+                         currentScope->addVariable(p.name, p.type, "-");
                          }
+
+                         currentScope = saved;
 
                          delete $1;
                          delete $2;
                          delete $4;
                     }
-               }
-               list RIGHTB
-               {
-                   currentScope=currentScope->getParent();
                }
                
               | BCLASS ID 
@@ -236,9 +180,15 @@ decl       :  TYPE ID ';' {   if(currentScope->lookupLocal(*$2) != nullptr){
                }
                LEFTB class_body RIGHTB ECLASS 
                {
-                    currentScope=currentScope->getParent();
-                    delete $2;
-                    
+                    if(currentScope->lookupLocal(*$2)){
+                                   cout<<"Eroare de semantica: clasa '"<<*$2<<"' este deja declarat la linia "<<yylineno<<endl;
+                                   errorCount++;
+                              }
+                    else
+                    {
+                         currentScope=currentScope->getParent();
+                         delete $2;
+                    }
                }
                | ID ID ';'
                {
@@ -257,7 +207,6 @@ decl       :  TYPE ID ';' {   if(currentScope->lookupLocal(*$2) != nullptr){
 
 list_param : TYPE ID 
                {
-                    //cout << currentScope->getName() << endl;
                     $$=new vector<Parameter>();
                     $$->push_back({*$1,*$2});
                     delete $1;
@@ -265,7 +214,6 @@ list_param : TYPE ID
                }
             | list_param COMMA TYPE ID
                {
-                    //cout << currentScope->getName() << endl;
                     $$=$1;
                     $$->push_back({*$3,*$4});
                     delete $3;
@@ -274,29 +222,11 @@ list_param : TYPE ID
             ;
             
 
->>>>>>> 6b12b73 (Modificari carina)
       
 class_body : class_body class_member | class_member ;
 
 class_member : TYPE ID ';'
                {
-<<<<<<< HEAD
-                    delete $1;
-                    delete $2;
-               }
-              | TYPE ID LEFTP list_param RIGHTP ';'
-               {
-                    delete $1;
-                    delete $2;
-               }
-              | acces_specifier TYPE ID ';'
-               {
-                    delete $2;
-                    delete $3;
-               }
-              | acces_specifier TYPE ID LEFTP list_param RIGHTP ';'
-                 {
-=======
                     currentScope->addVariable(*$2,*$1,"-");
                     delete $1;
                     delete $2;
@@ -308,13 +238,13 @@ class_member : TYPE ID ';'
 
                     currentScope->addFunction(*$2, *$1, params);
 
-                    /*SymbolTable* saved=currentScope;
+                    SymbolTable* saved=currentScope;
                     currentScope=currentScope->createChild("function "+*$2);
 
                     for(const auto& p : params) {
                          currentScope->addVariable(p.name, p.type, "-");
                     }
-                    currentScope=saved;*/
+                    currentScope=saved;
 
                     delete $1;
                     delete $2;
@@ -323,54 +253,28 @@ class_member : TYPE ID ';'
               
               | acces_specifier TYPE ID ';'
                {
-                    currentScope->addVariable(*$3,*$2,"-");
                     delete $2;
                     delete $3;
                }
                
               | acces_specifier TYPE ID LEFTP list_param RIGHTP ';'
                  {
-                    currentScope->addFunction(*$3, *$2, *$5);
                     delete $2;
                     delete $3;
                  }
-              | acces_specifier TYPE ID LEFTP RIGHTP LEFTB 
-              {
-                    vector<Parameter> params;
-                    currentScope->addFunction(*$3, *$2, params);
-                    currentScope=currentScope->createChild("function "+*$3);
-                    delete $2;
-                    delete $3;
-              }
-              list RIGHTB
+              | acces_specifier TYPE ID LEFTP RIGHTP LEFTB list RIGHTB
                  {
-                    if(currentScope)
-                         currentScope=currentScope->getParent();
+                    delete $2;
+                    delete $3;
                  }
-              | acces_specifier TYPE ID LEFTP list_param RIGHTP LEFTB 
-              {
-                    vector<Parameter> params = *$5;
-
-                         currentScope->addFunction(*$3, *$2, params);
-
-                         currentScope = currentScope->createChild("function " + *$3);
-
-                         for (const auto& p : params) {
-                              currentScope->addVariable(p.name, p.type, "-");
-                         }
+              | acces_specifier TYPE ID LEFTP list_param RIGHTP LEFTB list RIGHTB
+                 {
                     delete $2;
                     delete $3;
                     delete $5;
-              }
-              list RIGHTB
-                 {
-                    if(currentScope)
-                         currentScope=currentScope->getParent();
                  }
               | acces_specifier TYPE ID LEFTP RIGHTP ';'
                  {
-                    currentScope->addFunction(*$3, *$2, {});
->>>>>>> 6b12b73 (Modificari carina)
                     delete $2;
                     delete $3;
                  }
@@ -381,70 +285,6 @@ acces_specifier: PRIVATE
                 | PROTECTED
                 ;
 
-<<<<<<< HEAD
-main_block : BGIN list END  
-     ;
-     
-
-list :  statement ';' 
-     | list statement ';'
-     ;
-
-statement: assign
-         | function_call 		 
-         | if_statement 
-         | while_statement
-         | print_statement 
-         ;
-        
-assign : ID ASSIGN expression
-          {
-               delete $1;
-          }
-        ;  
-
-function_call: ID LEFTP call_parametres RIGHTP
-               {
-                    delete $1;
-               }
-               |ID DOT ID LEFTP call_parametres RIGHTP
-               {
-                    delete $1;
-                    delete $3;
-               }
-               ;
-call_parametres : expression
-           | call_parametres COMMA expression
-           ;
-
-if_statement: IF LEFTP bool_expression RIGHTP LEFTB list RIGHTB
-               | IF LEFTP bool_expression RIGHTP LEFTB list RIGHTB ELSE LEFTB list RIGHTB
-               ;
-
-while_statement: WHILE LEFTP bool_expression RIGHTP LEFTB list RIGHTB
-               ;
-          
-print_statement: PRINT LEFTP expression RIGHTP;
-
-expression: INT_NR
-          | FLOAT_NR
-          | STRING_S {delete $1;}
-          | TRUE
-          | FALSE
-          | ID {delete $1;}
-          | ID DOT ID
-               {
-                    delete $1;
-                    delete $3;
-               }
-          | expression PLUS expression
-          | expression MINUS expression
-          | MINUS expression %prec UMINUS
-          | expression MUL expression
-          | expression DIV expression
-          | LEFTP expression RIGHTP
-          ;
-=======
 main_block : BMAIN list EMAIN
      ;
      
@@ -473,7 +313,6 @@ assign : ID ASSIGN expression ';'
                }
                else if(*$3 != entry->varType){
                     cout<<"Eroare de semantica: asignare de tip incompatibil pentru variabila '"<<*$1<<"' la linia "<<yylineno<<endl;
-                    cout << "Tip variabila: " << entry->varType << ", tip expresie: " << *$3 << endl;
                     errorCount++;
                }
                delete $1;
@@ -509,77 +348,41 @@ assign : ID ASSIGN expression ';'
 
 declaration: INITIALIZE ID ';'
           {
-              // currentScope->addVariable(*$2,"unknown","-");
+               currentScope->addVariable(*$2,"unknown","-");
                delete $2;
           }
         ;
 
-function_call
-    : ID LEFTP call_parametres RIGHTP
-      {
-           SymbolEntry* entry = currentScope->lookup(*$1);
-           if(!entry || entry->kind != SymbolKind::Function){
-                cout<<"Eroare de semantica: functia '"<<*$1<<"' nedeclarata la linia "<<yylineno<<endl;
-                errorCount++;
-                $$ = new string("error");
-           } else {
-                if(entry->params.size() != $3->size()){
-                    cout<<"Eroare de semantica: numar incorect de parametrii pentru functia '"<<*$1<<"' la linia "<<yylineno<<endl;
+function_call: ID LEFTP call_parametres RIGHTP 
+          {
+               SymbolEntry* entry=currentScope->lookup(*$1);
+               if(!entry || entry->kind != SymbolKind::Function){
+                    cout<<"Eroare de semantica: functia '"<<*$1<<"' nedeclarata la linia "<<yylineno<<endl;
                     errorCount++;
-                    $$ = new string("error");
-                } else {
-                    bool ok = true;
-                    for(size_t i=0; i<entry->params.size(); i++){
-                         if(entry->params[i].type != (*$3)[i].type){
-                              cout<<"Eroare de semantica: tip de parametru incorect pentru parametrul "<<i+1<<" al functiei '"<<*$1<<"' la linia "<<yylineno<<endl;
-                              errorCount++;
-                              ok = false;
+               }
+               else{
+                    if(entry->params.size() != $3->size()){
+                         cout<<"Eroare de semantica: numar incorect de parametrii pentru functia '"<<*$1<<"' la linia "<<yylineno<<endl;
+                         errorCount++;
+                    }
+                    else{
+                         for(size_t i=0; i<entry->params.size(); i++){
+                              if(entry->params[i].type != (*$3)[i].type){
+                                   cout<<"Eroare de semantica: tip de parametru incorect pentru parametrul "<<i+1<<" al functiei '"<<*$1<<"' la linia "<<yylineno<<endl;
+                                   errorCount++;
+                              }
                          }
                     }
-                    if(ok) $$ = new string(entry->returnType);
-                    else $$ = new string("error");
-                }
-           }
-           delete $1;
-           delete $3;
-      }
-         | ID DOT ID LEFTP call_parametres RIGHTP
-      {
-           SymbolEntry* obj = currentScope->lookup(*$1);
-           if(!obj){
-                cout<<"Eroare de semantica: obiectul "<<*$1<<" nedeclarat la linia "<<yylineno<<endl;
-                errorCount++;
-                $$ = new string("error");
-           } else {
-                SymbolEntry* member = globalScope->lookupMember(obj->varType, *$3);
-                if(!member || member->kind != SymbolKind::Function){
-                     cout<<"Eroare de semantica: metoda '"<<*$3<<"' nedeclarata in clasa "<<obj->varType<<" la linia "<<yylineno<<endl;
-                     errorCount++;
-                     $$ = new string("error");
-                } else {
-                     if(member->params.size() != $5->size()){
-                          cout<<"Eroare de semantica: numar incorect de parametrii pentru metoda '"<<*$3<<"' la linia "<<yylineno<<endl;
-                          errorCount++;
-                          $$ = new string("error");
-                     } else {
-                          bool ok = true;
-                          for(size_t i=0;i<member->params.size();i++){
-                               if(member->params[i].type != (*$5)[i].type){
-                                    cout<<"Eroare de semantica: tip de parametru incorect pentru parametrul "<<i+1<<" al metodei '"<<*$3<<"' la linia "<<yylineno<<endl;
-                                    errorCount++;
-                                    ok = false;
-                               }
-                          }
-                          if(ok) $$ = new string(member->returnType);
-                          else $$ = new string("error");
-                     }
-                }
-           }
-           delete $1;
-           delete $3;
-           delete $5;
-      }
-    ;
+               }
+               delete $1;
+               delete $3;
+          }
+          |ID DOT ID LEFTP call_parametres RIGHTP 
+          {
+                delete $1;
+                delete $3;
+          }
+         ;
 
 if_statement: BIF bool_expression THEN statement EIF ';'
                | BIF bool_expression THEN list ELSE list EIF ';'
@@ -625,9 +428,9 @@ call_parametres : expression{
 
 expression: INT_NR { $$ = new string("integer");}
           | FLOAT_NR { $$ = new string("float");}
-          | STRING_S { $$ = new string("text"); delete $1;}
-          | TRUE { $$ = new string("bool");}
-          | FALSE { $$ = new string("bool");}
+          | STRING_S { $$ = new string(*$1); delete $1;}
+          | TRUE { $$ = new string("boolean");}
+          | FALSE { $$ = new string("boolean");}
           | ID {
                if(!currentScope->lookup(*$1)){
                     cout<<"Eroare de semantica: '"<<*$1<<"' nedeclarat la linia "<<yylineno<<endl;
@@ -668,11 +471,10 @@ expression: INT_NR { $$ = new string("integer");}
                {
                     delete $2;
                }
-          | function_call { $$ = $1; }
-          | expression PLUS expression {
-               if(*$1 != *$3) {
+          | function_call { $$ = new string("unknown"); }
+          | expression PLUS expression{
+               if(*$1 != *$3){
                     cout<<"Eroare de semantica: tipuri incompatibile pentru operatorul '+' la linia "<<yylineno<<endl;
-                    cout << "Tip stanga: " << *$1 << ", tip dreapta: " << *$3 << endl;
                     errorCount++;
                     $$ = new string("error");
                }
@@ -738,7 +540,6 @@ expression: INT_NR { $$ = new string("integer");}
 
 while_statement: BWHILE bool_expression DO list EWHILE
                ;
->>>>>>> 6b12b73 (Modificari carina)
 
 bool_expression: expression EQ expression
                | expression NEQ expression
@@ -759,9 +560,6 @@ void yyerror(const char * s){
 
 int main(int argc, char** argv){
      yyin=fopen(argv[1],"r");
-<<<<<<< HEAD
-     yyparse();
-=======
 
      globalScope=new SymbolTable("global", nullptr);
      currentScope=globalScope;
@@ -773,6 +571,6 @@ int main(int argc, char** argv){
      }
 
      delete globalScope;
->>>>>>> 6b12b73 (Modificari carina)
      return (errorCount == 0) ? 0 : 1;
 } 
+//fara segmantation fault, doar cu erori de semantica

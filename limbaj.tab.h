@@ -48,9 +48,17 @@ extern int yydebug;
 #line 1 "limbaj.y"
 
   #include <string>
+<<<<<<< HEAD
   using namespace std;
 
 #line 54 "limbaj.tab.h"
+=======
+  #include <vector>
+  using namespace std;
+  #include "symbol_table.hpp"
+
+#line 56 "limbaj.tab.h"
+>>>>>>> 6b12b73 (Modificari carina)
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -61,6 +69,7 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
+<<<<<<< HEAD
     BGIN = 258,                    /* BGIN  */
     END = 259,                     /* END  */
     ASSIGN = 260,                  /* ASSIGN  */
@@ -99,6 +108,60 @@ extern int yydebug;
     INT_NR = 293,                  /* INT_NR  */
     FLOAT_NR = 294,                /* FLOAT_NR  */
     UMINUS = 295                   /* UMINUS  */
+=======
+    BPROGRAM = 258,                /* BPROGRAM  */
+    EPROGRAM = 259,                /* EPROGRAM  */
+    BMAIN = 260,                   /* BMAIN  */
+    EMAIN = 261,                   /* EMAIN  */
+    ASSIGN = 262,                  /* ASSIGN  */
+    BIF = 263,                     /* BIF  */
+    THEN = 264,                    /* THEN  */
+    ELSE = 265,                    /* ELSE  */
+    EIF = 266,                     /* EIF  */
+    BWHILE = 267,                  /* BWHILE  */
+    DO = 268,                      /* DO  */
+    EWHILE = 269,                  /* EWHILE  */
+    BFOR = 270,                    /* BFOR  */
+    FROM = 271,                    /* FROM  */
+    TO = 272,                      /* TO  */
+    EFOR = 273,                    /* EFOR  */
+    INITIALIZE = 274,              /* INITIALIZE  */
+    TRUE = 275,                    /* TRUE  */
+    FALSE = 276,                   /* FALSE  */
+    AND = 277,                     /* AND  */
+    OR = 278,                      /* OR  */
+    NOT = 279,                     /* NOT  */
+    EQ = 280,                      /* EQ  */
+    NEQ = 281,                     /* NEQ  */
+    LE = 282,                      /* LE  */
+    GE = 283,                      /* GE  */
+    LT = 284,                      /* LT  */
+    GT = 285,                      /* GT  */
+    PLUS = 286,                    /* PLUS  */
+    MINUS = 287,                   /* MINUS  */
+    MUL = 288,                     /* MUL  */
+    DIV = 289,                     /* DIV  */
+    BCLASS = 290,                  /* BCLASS  */
+    ECLASS = 291,                  /* ECLASS  */
+    PRIVATE = 292,                 /* PRIVATE  */
+    PUBLIC = 293,                  /* PUBLIC  */
+    PROTECTED = 294,               /* PROTECTED  */
+    NEW = 295,                     /* NEW  */
+    RETURN = 296,                  /* RETURN  */
+    DOT = 297,                     /* DOT  */
+    COMMA = 298,                   /* COMMA  */
+    LEFTP = 299,                   /* LEFTP  */
+    RIGHTP = 300,                  /* RIGHTP  */
+    LEFTB = 301,                   /* LEFTB  */
+    RIGHTB = 302,                  /* RIGHTB  */
+    PRINT = 303,                   /* PRINT  */
+    ID = 304,                      /* ID  */
+    TYPE = 305,                    /* TYPE  */
+    STRING_S = 306,                /* STRING_S  */
+    INT_NR = 307,                  /* INT_NR  */
+    FLOAT_NR = 308,                /* FLOAT_NR  */
+    UMINUS = 309                   /* UMINUS  */
+>>>>>>> 6b12b73 (Modificari carina)
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -107,13 +170,23 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
+<<<<<<< HEAD
 #line 17 "limbaj.y"
+=======
+#line 24 "limbaj.y"
+>>>>>>> 6b12b73 (Modificari carina)
 
      string* Str;
      int Int;
      float Float;
+<<<<<<< HEAD
 
 #line 117 "limbaj.tab.h"
+=======
+     vector<Parameter>* Params;
+
+#line 134 "limbaj.tab.h"
+>>>>>>> 6b12b73 (Modificari carina)
 
 };
 typedef union YYSTYPE YYSTYPE;

@@ -13,6 +13,7 @@ FLOAT_NUMBER [0-9]+\.[0-9]+
 STRING_LIT \"([^\\\"]|\\.)*\"
 
 %%
+<<<<<<< HEAD
 "int"|"float"|"string"|"bool" {yylval.Str = new std::string(yytext); return TYPE;}
 "begin_program" {return BGIN;}
 "end_program" {return END;}
@@ -30,6 +31,31 @@ STRING_LIT \"([^\\\"]|\\.)*\"
 "&&" {return AND;}  
 "||" {return OR;}
 "!" {return NOT;}
+=======
+"integer"|"float"|"text"|"bool"|"void" {yylval.Str = new std::string(yytext); return TYPE;}
+"begin_program" {return BPROGRAM;}
+"end_program" {return EPROGRAM;}
+"begin_main" {return BMAIN;}
+"end_main" {return EMAIN;}
+"<-" {return ASSIGN;}
+"if" {return BIF;}
+"then" {return THEN;}
+"else" {return ELSE;}
+"endif" {return EIF;}
+"while" {return BWHILE;}
+"do" {return DO;}
+"endwhile" {return EWHILE;}
+"for" {return BFOR;}
+"from" {return FROM;}
+"to" {return TO;}
+"endfor" {return EFOR;}
+"initialize" {return INITIALIZE;}
+"true" {return TRUE;}
+"false" {return FALSE;}
+"and" {return AND;}  
+"or" {return OR;}
+"not" {return NOT;}
+>>>>>>> 6b12b73 (Modificari carina)
 "==" {return EQ;}
 "<>" {return NEQ;}
 "<=" {return LE;}
@@ -40,6 +66,17 @@ STRING_LIT \"([^\\\"]|\\.)*\"
 "-" {return MINUS;}
 "*" {return MUL;}
 "/" {return DIV;}
+<<<<<<< HEAD
+=======
+"begin_class" {return BCLASS;}
+"end_class" {return ECLASS;}
+"private" {return PRIVATE;}
+"public" {return PUBLIC;}
+"protected" {return PROTECTED;}
+"new" {return NEW; }
+"return" {return RETURN; }
+"Print" {return PRINT;}
+>>>>>>> 6b12b73 (Modificari carina)
 "." {return DOT;}
 "," {return COMMA;}
 "(" {return LEFTP;}
@@ -49,7 +86,11 @@ STRING_LIT \"([^\\\"]|\\.)*\"
 
 {FLOAT_NUMBER} {
     yylval.Float=(float)atof(yytext);
+<<<<<<< HEAD
     return FLOAT_NR;
+=======
+   return FLOAT_NR;
+>>>>>>> 6b12b73 (Modificari carina)
 }
 {INT_NUMBER} {
     yylval.Int=(int)atoi(yytext);
@@ -57,7 +98,11 @@ STRING_LIT \"([^\\\"]|\\.)*\"
 }
 
 {STRING_LIT} {
+<<<<<<< HEAD
     yylval.Str=new string(yytext);
+=======
+    yylval.Str=new std::string(yytext);
+>>>>>>> 6b12b73 (Modificari carina)
     return STRING_S;
 }
 

@@ -354,8 +354,13 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
+<<<<<<< HEAD
 #define YY_NUM_RULES 41
 #define YY_END_OF_BUFFER 42
+=======
+#define YY_NUM_RULES 55
+#define YY_END_OF_BUFFER 56
+>>>>>>> 6b12b73 (Modificari carina)
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -363,6 +368,7 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
+<<<<<<< HEAD
 static const flex_int16_t yy_accept[126] =
     {   0,
         0,    0,   42,   40,   38,   39,   17,   40,   40,   30,
@@ -379,6 +385,30 @@ static const flex_int16_t yy_accept[126] =
        37,   37,    6,    0,    0,   37,   37,    9,    0,    0,
         8,   37,    0,    0,   37,    0,    0,   10,    0,    0,
         0,    3,    0,    2,    0
+=======
+static const flex_int16_t yy_accept[184] =
+    {   0,
+        0,    0,   56,   54,   52,   53,   54,   44,   45,   32,
+       30,   43,   31,   42,   33,   49,   49,   28,   54,   29,
+       51,   51,   51,   51,   51,   51,   51,   51,   51,   51,
+       51,   51,   51,   51,   51,   46,   47,    0,   50,    0,
+        0,    0,   49,    6,   26,   25,   24,   27,   51,   51,
+       51,   51,   51,   12,   51,   51,   51,   51,   51,   51,
+        7,   51,   51,   51,   22,   51,   51,   51,   51,   51,
+       16,   51,   51,   51,   48,   51,   21,   51,   51,   51,
+       51,   51,   51,   14,   51,   51,   51,   39,   23,   51,
+       51,   51,   51,   51,   51,   51,   51,   51,   51,   51,
+
+        1,    9,    0,   51,   51,   51,   51,   51,   15,   51,
+       51,   51,   51,   51,   51,    8,   19,   51,   41,   51,
+        0,    0,    0,   51,   10,   51,   20,   51,   51,   51,
+       51,   51,   51,   11,    0,    0,    0,    0,   17,   51,
+       51,   51,   51,   51,   37,   40,    0,    0,    0,    0,
+        0,    0,   51,   51,   36,   51,    0,    0,    0,    0,
+        5,    0,   13,   51,   51,    0,    0,    0,   35,    0,
+       51,   38,    0,    4,    0,    0,   18,   34,    0,    3,
+        0,    2,    0
+>>>>>>> 6b12b73 (Modificari carina)
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -386,6 +416,7 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1,    1,    1,    1,    2,    3,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+<<<<<<< HEAD
         1,    2,    4,    5,    1,    1,    1,    6,    1,    7,
         8,    9,   10,   11,   12,   13,   14,   15,   16,   16,
        16,   16,   16,   16,   16,   16,   16,    1,    1,   17,
@@ -397,6 +428,19 @@ static const YY_CHAR yy_ec[256] =
        28,   29,   30,   31,   32,   20,   20,   33,   34,   35,
        36,   37,   20,   38,   39,   40,   41,   42,   43,   20,
        20,   20,   44,   45,   46,    1,    1,    1,    1,    1,
+=======
+        1,    2,    1,    4,    1,    1,    1,    1,    1,    5,
+        6,    7,    8,    9,   10,   11,   12,   13,   14,   14,
+       14,   14,   14,   14,   14,   14,   14,    1,    1,   15,
+       16,   17,    1,    1,   18,   18,   18,   18,   18,   18,
+       18,   18,   18,   18,   18,   18,   18,   18,   18,   19,
+       18,   18,   18,   18,   18,   18,   18,   18,   18,   18,
+        1,   20,    1,    1,   21,    1,   22,   23,   24,   25,
+
+       26,   27,   28,   29,   30,   18,   18,   31,   32,   33,
+       34,   35,   18,   36,   37,   38,   39,   40,   41,   42,
+       18,   43,   44,    1,   45,    1,    1,    1,    1,    1,
+>>>>>>> 6b12b73 (Modificari carina)
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -413,6 +457,7 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
+<<<<<<< HEAD
 static const YY_CHAR yy_meta[47] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -486,11 +531,104 @@ static const flex_int16_t yy_nxt[202] =
     } ;
 
 static const flex_int16_t yy_chk[202] =
+=======
+static const YY_CHAR yy_meta[46] =
+    {   0,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    2,    2,    1,    1,    1,    2,    2,    1,
+        1,    2,    2,    2,    2,    2,    2,    2,    2,    2,
+        2,    2,    2,    2,    2,    2,    2,    2,    2,    2,
+        2,    2,    2,    1,    1
+    } ;
+
+static const flex_int16_t yy_base[186] =
+    {   0,
+        0,    0,  211,  212,  212,  212,   42,  212,  212,  212,
+      212,  212,  212,  212,  212,   36,   40,   42,  194,  193,
+        0,  172,  174,   22,  172,   24,   38,   34,   37,  169,
+       29,  178,   44,  169,  173,  212,  212,   62,  212,  198,
+       62,   70,   74,  212,  212,  212,  212,  212,    0,  170,
+      174,  170,  163,    0,  159,  170,  163,  159,  156,  157,
+        0,   56,  149,  151,    0,   59,  165,  149,  144,  159,
+        0,  145,  153,  152,   77,  148,    0,  150,  148,  152,
+       71,  140,  154,    0,  143,  136,  147,    0,    0,  132,
+      133,  139,  130,  130,  134,  140,  140,  133,  125,  129,
+
+        0,    0,   71,  127,  133,  130,  132,  119,    0,  126,
+      127,  132,  127,  122,  115,    0,    0,  124,    0,  128,
+      117,  125,  110,  109,    0,  114,    0,  121,  116,  103,
+      116,  115,  105,    0,   72,  115,  106,  101,    0,  103,
+      102,   96,  105,   92,    0,    0,   98,  106,   91,   89,
+       92,   96,   97,   92,    0,   95,   98,   89,   84,   80,
+      212,   80,    0,   72,   86,   73,   76,   80,  212,   83,
+       76,    0,   63,  212,   63,   65,    0,  212,   57,  212,
+       45,  212,  212,  112,   62
+    } ;
+
+static const flex_int16_t yy_def[186] =
+    {   0,
+      183,    1,  183,  183,  183,  183,  184,  183,  183,  183,
+      183,  183,  183,  183,  183,  183,  183,  183,  183,  183,
+      185,  185,  185,  185,  185,  185,  185,  185,  185,  185,
+      185,  185,  185,  185,  185,  183,  183,  184,  183,  184,
+      183,  183,  183,  183,  183,  183,  183,  183,  185,  185,
+      185,  185,  185,  185,  185,  185,  185,  185,  185,  185,
+      185,  185,  185,  185,  185,  185,  185,  185,  185,  185,
+      185,  185,  185,  185,  183,  185,  185,  185,  185,  185,
+      185,  185,  185,  185,  185,  185,  185,  185,  185,  185,
+      185,  185,  185,  185,  185,  185,  185,  185,  185,  185,
+
+      185,  185,  183,  185,  185,  185,  185,  185,  185,  185,
+      185,  185,  185,  185,  185,  185,  185,  185,  185,  185,
+      183,  183,  183,  185,  185,  185,  185,  185,  185,  185,
+      185,  185,  185,  185,  183,  183,  183,  183,  185,  185,
+      185,  185,  185,  185,  185,  185,  183,  183,  183,  183,
+      183,  183,  185,  185,  185,  185,  183,  183,  183,  183,
+      183,  183,  185,  185,  185,  183,  183,  183,  183,  183,
+      185,  185,  183,  183,  183,  183,  185,  183,  183,  183,
+      183,  183,    0,  183,  183
+    } ;
+
+static const flex_int16_t yy_nxt[258] =
+    {   0,
+        4,    5,    6,    7,    8,    9,   10,   11,   12,   13,
+       14,   15,   16,   17,   18,   19,   20,   21,   22,    4,
+        4,   23,   24,   21,   25,   26,   27,   21,   21,   28,
+       21,   21,   29,   30,   31,   32,   21,   33,   21,   34,
+       35,   21,   21,   36,   37,   39,   41,   52,   42,   42,
+       41,   44,   43,   43,   55,   53,   56,   45,   46,   57,
+       61,   40,   63,   49,   66,   39,   62,   67,   58,   69,
+       64,   59,   70,   60,   75,   75,  182,   71,  181,   72,
+       41,   40,   42,   42,   41,   86,   43,   43,   90,   75,
+       75,  103,   91,   87,  121,  147,  180,  104,  179,  178,
+
+      105,  177,  122,  148,  176,  123,  149,  175,  174,  173,
+      172,  106,   38,   38,  171,  170,  169,  168,  167,  166,
+      165,  164,  163,  162,  161,  160,  159,  158,  157,  156,
+      155,  101,  154,  153,  152,  151,  150,  146,  145,  144,
+      143,  142,  141,  140,  139,  138,  137,  136,  135,  134,
+      133,  132,  131,  130,  129,  128,  101,  127,  126,  125,
+      124,  120,  119,  118,  101,  117,  116,  101,  115,  114,
+      113,  112,  111,  110,  109,  108,  107,  102,  101,  100,
+       99,   98,   97,   96,   95,   94,   93,   92,   89,   88,
+       85,   84,   83,   82,   81,   80,   79,   78,   77,   76,
+
+      183,   74,   73,   68,   65,   54,   51,   50,   48,   47,
+      183,    3,  183,  183,  183,  183,  183,  183,  183,  183,
+      183,  183,  183,  183,  183,  183,  183,  183,  183,  183,
+      183,  183,  183,  183,  183,  183,  183,  183,  183,  183,
+      183,  183,  183,  183,  183,  183,  183,  183,  183,  183,
+      183,  183,  183,  183,  183,  183,  183
+    } ;
+
+static const flex_int16_t yy_chk[258] =
+>>>>>>> 6b12b73 (Modificari carina)
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+<<<<<<< HEAD
         1,    1,    1,    1,    1,    1,    8,   18,   37,   18,
        18,   19,   25,   19,   19,   20,   20,   27,   28,   27,
        25,   30,   29,    8,   30,   37,  127,   28,   29,   41,
@@ -510,6 +648,32 @@ static const flex_int16_t yy_chk[202] =
       125,  125,  125,  125,  125,  125,  125,  125,  125,  125,
 
       125
+=======
+        1,    1,    1,    1,    1,    7,   16,   24,   16,   16,
+       17,   18,   17,   17,   26,   24,   26,   18,   18,   27,
+       28,    7,   29,  185,   31,   38,   28,   31,   27,   33,
+       29,   27,   33,   27,   41,   41,  181,   33,  179,   33,
+       42,   38,   42,   42,   43,   62,   43,   43,   66,   75,
+       75,   81,   66,   62,  103,  135,  176,   81,  175,  173,
+
+       81,  171,  103,  135,  170,  103,  135,  168,  167,  166,
+      165,   81,  184,  184,  164,  162,  160,  159,  158,  157,
+      156,  154,  153,  152,  151,  150,  149,  148,  147,  144,
+      143,  142,  141,  140,  138,  137,  136,  133,  132,  131,
+      130,  129,  128,  126,  124,  123,  122,  121,  120,  118,
+      115,  114,  113,  112,  111,  110,  108,  107,  106,  105,
+      104,  100,   99,   98,   97,   96,   95,   94,   93,   92,
+       91,   90,   87,   86,   85,   83,   82,   80,   79,   78,
+       76,   74,   73,   72,   70,   69,   68,   67,   64,   63,
+       60,   59,   58,   57,   56,   55,   53,   52,   51,   50,
+
+       40,   35,   34,   32,   30,   25,   23,   22,   20,   19,
+        3,  183,  183,  183,  183,  183,  183,  183,  183,  183,
+      183,  183,  183,  183,  183,  183,  183,  183,  183,  183,
+      183,  183,  183,  183,  183,  183,  183,  183,  183,  183,
+      183,  183,  183,  183,  183,  183,  183,  183,  183,  183,
+      183,  183,  183,  183,  183,  183,  183
+>>>>>>> 6b12b73 (Modificari carina)
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -532,8 +696,13 @@ char *yytext;
 #include <stdlib.h>
 #include "limbaj.tab.h"
 #include <string>
+<<<<<<< HEAD
 #line 536 "lex.yy.c"
 #line 537 "lex.yy.c"
+=======
+#line 564 "lex.yy.c"
+#line 565 "lex.yy.c"
+>>>>>>> 6b12b73 (Modificari carina)
 
 #define INITIAL 0
 
@@ -752,7 +921,11 @@ YY_DECL
 	{
 #line 15 "limbaj.l"
 
+<<<<<<< HEAD
 #line 756 "lex.yy.c"
+=======
+#line 784 "lex.yy.c"
+>>>>>>> 6b12b73 (Modificari carina)
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -779,13 +952,21 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
+<<<<<<< HEAD
 				if ( yy_current_state >= 126 )
+=======
+				if ( yy_current_state >= 184 )
+>>>>>>> 6b12b73 (Modificari carina)
 					yy_c = yy_meta[yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
 			++yy_cp;
 			}
+<<<<<<< HEAD
 		while ( yy_base[yy_current_state] != 155 );
+=======
+		while ( yy_base[yy_current_state] != 212 );
+>>>>>>> 6b12b73 (Modificari carina)
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -817,161 +998,286 @@ YY_RULE_SETUP
 case 2:
 YY_RULE_SETUP
 #line 17 "limbaj.l"
+<<<<<<< HEAD
 {return BGIN;}
+=======
+{return BPROGRAM;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
 #line 18 "limbaj.l"
+<<<<<<< HEAD
 {return END;}
+=======
+{return EPROGRAM;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
 #line 19 "limbaj.l"
+<<<<<<< HEAD
 {return IF;}
+=======
+{return BMAIN;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
 #line 20 "limbaj.l"
+<<<<<<< HEAD
 {return ELSE;}
+=======
+{return EMAIN;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 21 "limbaj.l"
+<<<<<<< HEAD
 {return WHILE;}
+=======
+{return ASSIGN;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
 #line 22 "limbaj.l"
+<<<<<<< HEAD
 {return CLASS;}
+=======
+{return BIF;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 23 "limbaj.l"
+<<<<<<< HEAD
 {return PRIVATE;}
+=======
+{return THEN;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
 #line 24 "limbaj.l"
+<<<<<<< HEAD
 {return PUBLIC;}
+=======
+{return ELSE;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 25 "limbaj.l"
+<<<<<<< HEAD
 {return PROTECTED;}
+=======
+{return EIF;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
 #line 26 "limbaj.l"
+<<<<<<< HEAD
 {return PRINT;}
+=======
+{return BWHILE;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
 #line 27 "limbaj.l"
+<<<<<<< HEAD
 {return TRUE;}
+=======
+{return DO;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
 #line 28 "limbaj.l"
+<<<<<<< HEAD
 {return FALSE;}
+=======
+{return EWHILE;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
 #line 29 "limbaj.l"
+<<<<<<< HEAD
 {return ASSIGN;}
+=======
+{return BFOR;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
 #line 30 "limbaj.l"
+<<<<<<< HEAD
 {return AND;}  
+=======
+{return FROM;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
 #line 31 "limbaj.l"
+<<<<<<< HEAD
 {return OR;}
+=======
+{return TO;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
 #line 32 "limbaj.l"
+<<<<<<< HEAD
 {return NOT;}
+=======
+{return EFOR;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
 #line 33 "limbaj.l"
+<<<<<<< HEAD
 {return EQ;}
+=======
+{return INITIALIZE;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
 #line 34 "limbaj.l"
+<<<<<<< HEAD
 {return NEQ;}
+=======
+{return TRUE;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
 #line 35 "limbaj.l"
+<<<<<<< HEAD
 {return LE;}
+=======
+{return FALSE;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
 #line 36 "limbaj.l"
+<<<<<<< HEAD
 {return GE;}
+=======
+{return AND;}  
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
 #line 37 "limbaj.l"
+<<<<<<< HEAD
 {return LT;}
+=======
+{return OR;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
 #line 38 "limbaj.l"
+<<<<<<< HEAD
 {return GT;}
+=======
+{return NOT;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
 #line 39 "limbaj.l"
+<<<<<<< HEAD
 {return PLUS;}
+=======
+{return EQ;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
 #line 40 "limbaj.l"
+<<<<<<< HEAD
 {return MINUS;}
+=======
+{return NEQ;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
 #line 41 "limbaj.l"
+<<<<<<< HEAD
 {return MUL;}
+=======
+{return LE;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
 #line 42 "limbaj.l"
+<<<<<<< HEAD
 {return DIV;}
+=======
+{return GE;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
 #line 43 "limbaj.l"
+<<<<<<< HEAD
 {return DOT;}
+=======
+{return LT;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
 #line 44 "limbaj.l"
+<<<<<<< HEAD
 {return COMMA;}
+=======
+{return GT;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
 #line 45 "limbaj.l"
+<<<<<<< HEAD
 {return LEFTP;}
+=======
+{return PLUS;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
 #line 46 "limbaj.l"
+<<<<<<< HEAD
 {return RIGHTP;}
+=======
+{return MINUS;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
 #line 47 "limbaj.l"
+<<<<<<< HEAD
 {return LEFTB;}
+=======
+{return MUL;}
+>>>>>>> 6b12b73 (Modificari carina)
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
 #line 48 "limbaj.l"
+<<<<<<< HEAD
 {return RIGHTB;}
 	YY_BREAK
 case 34:
@@ -985,11 +1291,97 @@ YY_RULE_SETUP
 case 35:
 YY_RULE_SETUP
 #line 54 "limbaj.l"
+=======
+{return DIV;}
+	YY_BREAK
+case 34:
+YY_RULE_SETUP
+#line 49 "limbaj.l"
+{return BCLASS;}
+	YY_BREAK
+case 35:
+YY_RULE_SETUP
+#line 50 "limbaj.l"
+{return ECLASS;}
+	YY_BREAK
+case 36:
+YY_RULE_SETUP
+#line 51 "limbaj.l"
+{return PRIVATE;}
+	YY_BREAK
+case 37:
+YY_RULE_SETUP
+#line 52 "limbaj.l"
+{return PUBLIC;}
+	YY_BREAK
+case 38:
+YY_RULE_SETUP
+#line 53 "limbaj.l"
+{return PROTECTED;}
+	YY_BREAK
+case 39:
+YY_RULE_SETUP
+#line 54 "limbaj.l"
+{return NEW; }
+	YY_BREAK
+case 40:
+YY_RULE_SETUP
+#line 55 "limbaj.l"
+{return RETURN; }
+	YY_BREAK
+case 41:
+YY_RULE_SETUP
+#line 56 "limbaj.l"
+{return PRINT;}
+	YY_BREAK
+case 42:
+YY_RULE_SETUP
+#line 57 "limbaj.l"
+{return DOT;}
+	YY_BREAK
+case 43:
+YY_RULE_SETUP
+#line 58 "limbaj.l"
+{return COMMA;}
+	YY_BREAK
+case 44:
+YY_RULE_SETUP
+#line 59 "limbaj.l"
+{return LEFTP;}
+	YY_BREAK
+case 45:
+YY_RULE_SETUP
+#line 60 "limbaj.l"
+{return RIGHTP;}
+	YY_BREAK
+case 46:
+YY_RULE_SETUP
+#line 61 "limbaj.l"
+{return LEFTB;}
+	YY_BREAK
+case 47:
+YY_RULE_SETUP
+#line 62 "limbaj.l"
+{return RIGHTB;}
+	YY_BREAK
+case 48:
+YY_RULE_SETUP
+#line 64 "limbaj.l"
+{
+    yylval.Float=(float)atof(yytext);
+   return FLOAT_NR;
+}
+	YY_BREAK
+case 49:
+YY_RULE_SETUP
+#line 68 "limbaj.l"
+>>>>>>> 6b12b73 (Modificari carina)
 {
     yylval.Int=(int)atoi(yytext);
     return INT_NR;
 }
 	YY_BREAK
+<<<<<<< HEAD
 case 36:
 /* rule 36 can match eol */
 YY_RULE_SETUP
@@ -1026,6 +1418,44 @@ YY_RULE_SETUP
 ECHO;
 	YY_BREAK
 #line 1029 "lex.yy.c"
+=======
+case 50:
+/* rule 50 can match eol */
+YY_RULE_SETUP
+#line 73 "limbaj.l"
+{
+    yylval.Str=new std::string(yytext);
+    return STRING_S;
+}
+	YY_BREAK
+case 51:
+YY_RULE_SETUP
+#line 78 "limbaj.l"
+{yylval.Str = new std::string(yytext); return ID;}
+	YY_BREAK
+case 52:
+YY_RULE_SETUP
+#line 80 "limbaj.l"
+;
+	YY_BREAK
+case 53:
+/* rule 53 can match eol */
+YY_RULE_SETUP
+#line 81 "limbaj.l"
+{yylineno++;}
+	YY_BREAK
+case 54:
+YY_RULE_SETUP
+#line 82 "limbaj.l"
+{return yytext[0];}
+	YY_BREAK
+case 55:
+YY_RULE_SETUP
+#line 83 "limbaj.l"
+ECHO;
+	YY_BREAK
+#line 1127 "lex.yy.c"
+>>>>>>> 6b12b73 (Modificari carina)
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1322,7 +1752,11 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
+<<<<<<< HEAD
 			if ( yy_current_state >= 126 )
+=======
+			if ( yy_current_state >= 184 )
+>>>>>>> 6b12b73 (Modificari carina)
 				yy_c = yy_meta[yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
@@ -1350,11 +1784,19 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
+<<<<<<< HEAD
 		if ( yy_current_state >= 126 )
 			yy_c = yy_meta[yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
 	yy_is_jam = (yy_current_state == 125);
+=======
+		if ( yy_current_state >= 184 )
+			yy_c = yy_meta[yy_c];
+		}
+	yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
+	yy_is_jam = (yy_current_state == 183);
+>>>>>>> 6b12b73 (Modificari carina)
 
 		return yy_is_jam ? 0 : yy_current_state;
 }
@@ -2030,5 +2472,9 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
+<<<<<<< HEAD
 #line 69 "limbaj.l"
+=======
+#line 83 "limbaj.l"
+>>>>>>> 6b12b73 (Modificari carina)
 
