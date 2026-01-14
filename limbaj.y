@@ -65,7 +65,7 @@ SymbolTable* currentScope=nullptr;
 
 %type<Expr> expression
 %type<Expr> bool_expression
-%type<Str> function_call
+%type<Expr> function_call
 %type<Params> call_parametres
 %type<Params> list_param
 
@@ -195,7 +195,11 @@ decl       :  TYPE ID ';' {   if(currentScope->lookupLocal(*$2) != nullptr){
                }
                | ID ID ';'
                {
-                    if(currentScope->lookupLocal(*$2)){
+                    if(!globalScope->lookup(*$1) || globalScope->lookup(*$1)->kind != SymbolKind::Class) {
+                         cout << "Eroare de semantica: clasa '" << *$1 << "' nedeclarata la linia " << yylineno << endl;
+                         errorCount++;
+                    } 
+                    else if(currentScope->lookupLocal(*$2)){
                          cout<<"Eroare de semantica: obiectul '"<<*$2<<"' este deja declarat la linia "<<yylineno<<endl;
                          errorCount++;
                     }
@@ -325,7 +329,7 @@ list :  statement
 
 statement: assign
          | decl
-         | function_call ';'		 
+         | function_call 	 
          | if_statement 
          | while_statement
          | for_statement
@@ -343,6 +347,25 @@ assign : ID ASSIGN expression ';'
                else if(*($3->type) != entry->varType){
                     cout<<"Eroare de semantica: asignare de tip incompatibil pentru variabila '"<<*$1<<"' la linia "<<yylineno<<endl;
                     cout << "Tip variabila: " << entry->varType << ", tip expresie: " << *($3->type) << endl;
+                    errorCount++;
+               }
+
+               ASTNode* root=new ASTNode(":=", new ASTNode(*$1), $3->node);
+               $3->node=nullptr;
+               root->evaluate(currentScope);
+               delete root;
+               delete $1;
+               freeExpr($3);
+          }
+          | ID ASSIGN bool_expression ';'
+          {
+               auto* entry=currentScope->lookup(*$1);
+               if(!entry){
+                    cout<<"Eroare de semantica: variabila '"<<*$1<<"' nedeclarata la linia "<<yylineno<<endl;
+                    errorCount++;
+               }
+               else if(*($3->type) != entry->varType){
+                    cout<<"Eroare de semantica: asignare de tip incompatibil pentru variabila '"<<*$1<<"' la linia "<<yylineno<<endl;
                     errorCount++;
                }
 
@@ -374,12 +397,21 @@ assign : ID ASSIGN expression ';'
                          cout<<"Eroare de semantica: asignare de tip incompatibil pentru membrul "<<*$3<<" al clasei "<<obj->varType<<" la linia "<<yylineno<<endl;
                          errorCount++;
                     }
+                    else
+                    {
+                         ASTNode* memberNode = new ASTNode("dot", new ASTNode(*$1), new ASTNode(*$3));
+                         ASTNode* root=new ASTNode(":=", memberNode, $5->node);
+                         $5->node=nullptr;
+                         root->evaluate(currentScope);
+                         delete root;
+                    }
                }
                delete $1;
                delete $3;
                freeExpr($5);
           }
         ;  
+
 
 
 
@@ -390,12 +422,12 @@ function_call
            if(!entry || entry->kind != SymbolKind::Function){
                 cout<<"Eroare de semantica: functia '"<<*$1<<"' nedeclarata la linia "<<yylineno<<endl;
                 errorCount++;
-                $$ = new string("error");
+                $$ = new ExprInfo{ new ASTNode("error"), new string("error") };
            } else {
                 if(entry->params.size() != $3->size()){
                     cout<<"Eroare de semantica: numar incorect de parametrii pentru functia '"<<*$1<<"' la linia "<<yylineno<<endl;
                     errorCount++;
-                    $$ = new string("error");
+                    $$ = new ExprInfo{ new ASTNode("error"), new string("error") };
                 } else {
                     bool ok = true;
                     for(size_t i=0; i<entry->params.size(); i++){
@@ -405,31 +437,31 @@ function_call
                               ok = false;
                          }
                     }
-                    if(ok) $$ = new string(entry->returnType);
-                    else $$ = new string("error");
+                    if(ok) $$ = new ExprInfo{ new ASTNode(*$1), new string(entry->returnType) };
+                    else   $$ = new ExprInfo{ new ASTNode("error"), new string("error") };
                 }
            }
            delete $1;
            delete $3;
       }
-         | ID DOT ID LEFTP call_parametres RIGHTP
+    | ID DOT ID LEFTP call_parametres RIGHTP
       {
            SymbolEntry* obj = currentScope->lookup(*$1);
            if(!obj){
                 cout<<"Eroare de semantica: obiectul "<<*$1<<" nedeclarat la linia "<<yylineno<<endl;
                 errorCount++;
-                $$ = new string("error");
+                $$ = new ExprInfo{ new ASTNode("error"), new string("error") };
            } else {
                 SymbolEntry* member = globalScope->lookupMember(obj->varType, *$3);
                 if(!member || member->kind != SymbolKind::Function){
                      cout<<"Eroare de semantica: metoda '"<<*$3<<"' nedeclarata in clasa "<<obj->varType<<" la linia "<<yylineno<<endl;
                      errorCount++;
-                     $$ = new string("error");
+                     $$ = new ExprInfo{ new ASTNode("error"), new string("error") };
                 } else {
                      if(member->params.size() != $5->size()){
                           cout<<"Eroare de semantica: numar incorect de parametrii pentru metoda '"<<*$3<<"' la linia "<<yylineno<<endl;
                           errorCount++;
-                          $$ = new string("error");
+                          $$ = new ExprInfo{ new ASTNode("error"), new string("error") };
                      } else {
                           bool ok = true;
                           for(size_t i=0;i<member->params.size();i++){
@@ -439,8 +471,8 @@ function_call
                                     ok = false;
                                }
                           }
-                          if(ok) $$ = new string(member->returnType);
-                          else $$ = new string("error");
+                          if(ok) $$ = new ExprInfo{ new ASTNode(*$1 + string(".") + *$3), new string(member->returnType) };
+                          else   $$ = new ExprInfo{ new ASTNode("error"), new string("error") };
                      }
                 }
            }
@@ -519,7 +551,7 @@ call_parametres : expression{
 
 expression: INT_NR { $$=new ExprInfo{new ASTNode(to_string($1)), new string("integer")};}
           | FLOAT_NR { $$ = new ExprInfo{new ASTNode(to_string($1)), new string("float")};}
-          | STRING_S { $$ = new ExprInfo{new ASTNode(*$1), new string("text")}; delete $1;}
+          | STRING_S { $$ = new ExprInfo{new ASTNode("\"" + *$1 + "\""), new string("text")}; delete $1;}
           | TRUE { $$ = new ExprInfo{new ASTNode("true"), new string("bool")};}
           | FALSE { $$ = new ExprInfo{new ASTNode("false"), new string("bool")};}
           | ID {
@@ -553,7 +585,7 @@ expression: INT_NR { $$=new ExprInfo{new ASTNode(to_string($1)), new string("int
                               $$ = new ExprInfo{new ASTNode("error"), new string("error")};
                          }
                          else{
-                              $$ = new ExprInfo{new ASTNode(*$1+string(".")+*$3), new string(member->varType)};
+                              $$ = new ExprInfo{new ASTNode("dot", new ASTNode(*$1), new ASTNode(*$3)), new string(member->varType)};
                          }
                     }
                     delete $1;
@@ -567,7 +599,7 @@ expression: INT_NR { $$=new ExprInfo{new ASTNode(to_string($1)), new string("int
     };
                     delete $2;
                }
-          //| function_call { $$ = $1; }
+          | function_call {}
           | expression PLUS expression {
                if(*($1->type) != *($3->type)) {
                     cout<<"Eroare de semantica: tipuri incompatibile pentru operatorul '+' la linia "<<yylineno<<endl;
@@ -638,27 +670,29 @@ expression: INT_NR { $$=new ExprInfo{new ASTNode(to_string($1)), new string("int
                freeExpr($1);
                freeExpr($3);
           }
-          | LEFTP expression RIGHTP { $$ =$2;}
-          /*| expression AND expression{
-               if(*$1 != *$3){
-                    cout<<"Eroare de semantica: tipuri incompatibile pentru operatorul 'and' la linia "<<yylineno<<endl;
+          | expression AND expression {
+               if(*($1->type)!="bool" || *($3->type)!="bool"){
+                    cout<<"Eroare de semantica: operator AND pe tip nebool la linia "<<yylineno<<endl;
                     errorCount++;
-                    $$ = new string("error");
+                    $$ = new ExprInfo{new ASTNode("and", $1->node, $3->node), new string("error")};
+               } else {
+                    $$ = new ExprInfo{new ASTNode("and", $1->node, $3->node), new string("bool")};
                }
-               else $$ = new string(*$1);
-               delete $1;
-               delete $3;
+               $1->node=nullptr; $3->node=nullptr;
+               freeExpr($1); freeExpr($3);
           }
-          | expression OR expression{
-               if(*$1 != *$3){
-                    cout<<"Eroare de semantica: tipuri incompatibile pentru operatorul 'or' la linia "<<yylineno<<endl;
+          | expression OR expression { 
+               if(*($1->type)!="bool" || *($3->type)!="bool"){
+                    cout<<"Eroare de semantica: operator OR pe tip nebool la linia "<<yylineno<<endl;
                     errorCount++;
-                    $$ = new string("error");
+                    $$ = new ExprInfo{new ASTNode("or", $1->node, $3->node), new string("error")};
+               } else {
+                    $$ = new ExprInfo{new ASTNode("or", $1->node, $3->node), new string("bool")};
                }
-               else $$ = new string(*$1);
-               delete $1;
-               delete $3;
-          }*/
+               $1->node=nullptr; $3->node=nullptr;
+               freeExpr($1); freeExpr($3);
+          }
+          | LEFTP expression RIGHTP { $$ =$2;}
           | NOT expression { 
                if(*($2->type) != "bool"){
                     cout<<"Eroare de semantica: 'not' pe tip invalid la linia "<<yylineno<<endl;

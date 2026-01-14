@@ -1,5 +1,5 @@
 Scope: global
-  class A
-
-  Scope: class A (parent: global)
+  var a : bool = true
+  var b : bool = false
+  var c : bool = true
 

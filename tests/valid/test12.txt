@@ -1,0 +1,16 @@
+begin_program
+bool a;
+bool b;
+bool c;
+
+begin_main
+    a <- true;
+    b <- false;
+    c <- true;
+
+    Print(a and c);
+    Print(a or b);
+    Print(not b);
+    Print(a or b and not c);
+end_main
+end_program

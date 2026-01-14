@@ -1,8 +1,11 @@
 begin_program
-integer i;
+begin_class MyClass {
+integer a;
+integer b;
+}
+end_class
+integer x;
 begin_main
-for i from 1 to 3 do
-Print(i);
-endfor;
+x <- 1;
 end_main
 end_program

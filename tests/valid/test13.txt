@@ -1,0 +1,18 @@
+begin_program
+integer i;
+float f;
+bool b;
+text s;
+
+begin_main
+    i <- 10;
+    f <- 3.5;
+    b <- true;
+    s <- "hello";
+
+    Print(i);
+    Print(f);
+    Print(b);
+    Print(s);
+end_main
+end_program

@@ -1,0 +1,11 @@
+begin_program
+integer i;
+
+begin_main
+    i <- 1;
+    while i < 5 do
+        Print(i);
+        i <- i + 1;
+    endwhile
+end_main
+end_program

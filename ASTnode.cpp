@@ -1,13 +1,18 @@
 #include "ASTnode.hpp"
 #include <cstdlib>
+extern SymbolTable* globalScope;
 
 Value ASTNode::evaluate(SymbolTable* scope){
     //frunza
     if(!left && !right){
+
+        if(label.size() >= 2 && label.front() == '"' && label.back() == '"'){
+            return Value::String(label.substr(1, label.size() - 2));
+        }
         if(label=="true") return Value::Bool(true);
         if(label=="false") return Value::Bool(false);
 
-        if(isdigit(label[0]) || (label[0]=='-' && label.size()>1 )){
+        if(!label.empty() && (isdigit(label[0]) || (label[0]=='-' && label.size()>1 ))){
             return Value::Int(stoi(label));
         }
 
@@ -34,14 +39,47 @@ Value ASTNode::evaluate(SymbolTable* scope){
         }
     }
 
+    if(label == "dot"){
+        SymbolEntry* objEntry = scope->lookup(left->label);
+        if(!objEntry) return Value::Error();
+        SymbolEntry* member = globalScope->lookupMember(objEntry->varType, right->label);
+        if(!member) return Value::Error();
+        if(member->varType=="integer"){
+            return Value::Int(stoi(member->value));
+        }
+        else if(member->varType=="float"){
+            return Value::Float(stof(member->value));
+        }
+        else if(member->varType=="bool"){
+            return Value::Bool(member->value=="true");
+        }
+        else if(member->varType=="text"){
+            return Value::String(member->value);
+        }
+        return Value::Error();
+    }
+
     if(label==":="){
         Value v= right->evaluate(scope);
-        SymbolEntry* entry=scope->lookup(left->label);
-        if(entry){
-            if(v.type==ValueType::INT) entry->value=to_string(v.intValue);
-            else if(v.type==ValueType::FLOAT) entry->value=to_string(v.floatValue);
-            else if(v.type==ValueType::BOOL) entry->value=(v.boolValue ? "true" : "false");
-            else if(v.type==ValueType::STRING) entry->value=v.stringValue;
+        if(left->label == "dot"){
+            SymbolEntry* objEntry = scope->lookup(left->left->label);
+            if(objEntry){
+                SymbolEntry* member = globalScope->lookupMember(objEntry->varType, left->right->label);
+                if(member){
+                    if(v.type==ValueType::INT) member->value=to_string(v.intValue);
+                    else if(v.type==ValueType::FLOAT) member->value=to_string(v.floatValue);
+                    else if(v.type==ValueType::BOOL) member->value=(v.boolValue ? "true" : "false");
+                    else if(v.type==ValueType::STRING) member->value=v.stringValue;
+                }
+            }
+        } else {
+            SymbolEntry* entry=scope->lookup(left->label);
+            if(entry){
+                if(v.type==ValueType::INT) entry->value=to_string(v.intValue);
+                else if(v.type==ValueType::FLOAT) entry->value=to_string(v.floatValue);
+                else if(v.type==ValueType::BOOL) entry->value=(v.boolValue ? "true" : "false");
+                else if(v.type==ValueType::STRING) entry->value=v.stringValue;
+            }
         }
         return v;
     }
@@ -53,10 +91,7 @@ Value ASTNode::evaluate(SymbolTable* scope){
         return v;
     }
 
-    Value a=left->evaluate(scope);
-    Value b=right->evaluate(scope);
-
-    if(label=="-" && left && !right){
+    if(label=="uminus" ){
         Value v=left->evaluate(scope);
         if(v.type==ValueType::INT) return Value::Int(-v.intValue);
         if(v.type==ValueType::FLOAT) return Value::Float(-v.floatValue);
@@ -69,10 +104,40 @@ Value ASTNode::evaluate(SymbolTable* scope){
         return Value::Error();
     }
 
-    if(label=="+") return Value::Int(a.intValue + b.intValue);
-    if(label=="-") return Value::Int(a.intValue - b.intValue);
-    if(label=="*") return Value::Int(a.intValue * b.intValue);
-    if(label=="/") return Value::Int(a.intValue / b.intValue);
+    Value a=left->evaluate(scope);
+    Value b=right->evaluate(scope);
+
+    if(label=="+") {
+        if(a.type==ValueType::FLOAT || b.type==ValueType::FLOAT){
+            float af = (a.type==ValueType::FLOAT) ? a.floatValue : static_cast<float>(a.intValue);
+            float bf = (b.type==ValueType::FLOAT) ? b.floatValue : static_cast<float>(b.intValue);
+            return Value::Float(af + bf);
+        }
+        return Value::Int(a.intValue + b.intValue);
+    }
+    if(label=="-") {
+        if(a.type==ValueType::FLOAT || b.type==ValueType::FLOAT){
+            float af = (a.type==ValueType::FLOAT) ? a.floatValue : static_cast<float>(a.intValue);
+            float bf = (b.type==ValueType::FLOAT) ? b.floatValue : static_cast<float>(b.intValue);
+            return Value::Float(af - bf);
+        }
+        return Value::Int(a.intValue - b.intValue);
+    }
+    if(label=="*") {
+        if(a.type==ValueType::FLOAT || b.type==ValueType::FLOAT){
+            float af = (a.type==ValueType::FLOAT) ? a.floatValue : static_cast<float>(a.intValue);
+            float bf = (b.type==ValueType::FLOAT) ? b.floatValue : static_cast<float>(b.intValue);
+            return Value::Float(af * bf);
+        }
+        return Value::Int(a.intValue * b.intValue);
+    }
+    if(label=="/") {
+        if(a.type==ValueType::FLOAT || b.type==ValueType::FLOAT){
+            float af = (a.type==ValueType::FLOAT) ? a.floatValue : static_cast<float>(a.intValue);
+            float bf = (b.type==ValueType::FLOAT) ? b.floatValue : static_cast<float>(b.intValue);
+            return Value::Float(af / bf);
+        }
+        return Value::Int(a.intValue / b.intValue);}
     if(label=="<") return Value::Bool(a.intValue < b.intValue);
     if(label==">") return Value::Bool(a.intValue > b.intValue);
     if(label=="==") return Value::Bool(a.intValue == b.intValue);

@@ -1,7 +1,49 @@
 begin_program
-integer x;
+begin_class Point {
+    public integer x;
+    public integer y;
+    public void init(integer dx, integer dy) {
+        x<-dx;
+        y<-dy;    
+    }
+    public integer sum() {
+        return x+y;    
+    }
+}
+end_class
+
+integer add(integer a,integer b) {
+    integer r;
+    r<-a+b;
+    return r;
+}
+
+bool isPositive(integer v) {
+    if v > 0 then 
+        return true;
+    endif;
+    return false;
+}
+
+integer a;
+integer b;
+integer c;
+bool flag;
+Point p;
+
 begin_main
-x <- (3 + 4) * 2 - 1;
-Print(x);
+    a<-5;
+    b<-7;
+    c<-add(a,b);
+    flag<-isPositive(c);
+    Print(c);
+    Print(flag);
+    p.init(a,b);
+    Print(p.x);
+    Print(p.y);
+    Print(p.sum());
+    Print(1+2*3);
+    Print(not false);
 end_main
+
 end_program

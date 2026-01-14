@@ -1,0 +1,16 @@
+begin_program
+integer a;
+bool ok;
+
+begin_main
+    a <- 10;
+
+    if a > 5 then
+        ok <- true;
+    else
+        ok <- false;
+    endif;
+
+    Print(ok);
+end_main
+end_program

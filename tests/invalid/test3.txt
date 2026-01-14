@@ -1,7 +1,6 @@
 begin_program
-integer f();
+integer f(integer x);
 begin_main
-initiliaze x;
-x <- 1;
+x <- f(5);
 end_main
 end_program

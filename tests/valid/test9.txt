@@ -1,0 +1,19 @@
+begin_program
+integer a;
+integer b;
+integer c;
+bool flag;
+
+begin_main
+    a <- 5;
+    b <- 10;
+    c <- a + b * 2;
+    flag <- true;
+
+    Print(a);
+    Print(b);
+    Print(c);
+    Print(flag);
+    Print(not false);
+end_main
+end_program

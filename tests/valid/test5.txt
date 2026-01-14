@@ -1,10 +1,11 @@
 begin_program
-begin_class MyClass {
 integer a;
 integer b;
-}
-end_class
+integer c;
 begin_main
-x <- 1;
+a <- 1;
+b <- 2;
+c <- a + b;
+Print(c);
 end_main
 end_program

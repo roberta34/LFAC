@@ -1,7 +1,8 @@
 begin_program
-integer f(integer x);
+begin_class A {
+}
+end_class
 begin_main
-initialize x;
-x <- f();
+x <- 1;
 end_main
 end_program
