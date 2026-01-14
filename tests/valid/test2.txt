@@ -1,10 +1,9 @@
 begin_program
 integer x;
 begin_main
-initialize x;
 x <- 0;
 while x < 3 do
 x <- x + 1;
-endwhile;
+endwhile
 end_main
 end_program

@@ -84,3 +84,53 @@ void SymbolTable::printAll(ostream &out, int indentLevel) const{
         child->printAll(out, indentLevel+2);
     }
 }
+SymbolEntry* SymbolTable::lookupLocal(const string& name){
+    for(auto& entry : locals){
+        if(entry.name == name){
+            return &entry;
+        }
+    }
+    return nullptr;
+}
+SymbolEntry* SymbolTable::lookup(const string& name){
+    for(SymbolTable* current=this; current!=nullptr; current=current->parent){
+        SymbolEntry* entry = current->lookupLocal(name);
+        if(entry != nullptr){
+            return entry;
+        }
+    }
+    return nullptr;
+}
+SymbolEntry* SymbolTable::lookupClass(const string& class_name){
+    for(auto & entry : locals){
+        if(entry.kind==SymbolKind::Class && entry.name==class_name){
+            return &entry;
+        }
+    }
+    return nullptr;
+}
+SymbolEntry* SymbolTable::lookupMember(const string& class_name, const string& member_name){
+    for(auto& child : children){
+        if(child->getName() == "class " + class_name){
+            for(auto& entry : child->locals){
+                if(entry.name == member_name){
+                    return &entry;
+                }
+            }
+        }
+    }
+    return nullptr;
+}
+SymbolEntry* SymbolTable::getParentFunction(){
+    SymbolTable* scope= this;
+    while(scope)
+    {
+        for(auto& entry : scope->locals){
+            if(entry.kind == SymbolKind::Function){
+                return &entry;
+            }
+        }
+        scope=scope->parent;
+    }
+    return nullptr;
+}

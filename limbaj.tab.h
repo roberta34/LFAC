@@ -47,12 +47,25 @@ extern int yydebug;
 /* "%code requires" blocks.  */
 #line 1 "limbaj.y"
 
+  #include <iostream>
   #include <string>
   #include <vector>
   using namespace std;
   #include "symbol_table.hpp"
+  #include "ASTnode.hpp"
 
-#line 56 "limbaj.tab.h"
+  struct ExprInfo {
+     ASTNode* node;
+     string* type;
+  };
+  static void freeExpr(ExprInfo* e) {
+     if(!e) return;
+     delete e->node;
+     delete e->type;
+     delete e;
+}
+
+#line 69 "limbaj.tab.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -79,42 +92,41 @@ extern int yydebug;
     FROM = 271,                    /* FROM  */
     TO = 272,                      /* TO  */
     EFOR = 273,                    /* EFOR  */
-    INITIALIZE = 274,              /* INITIALIZE  */
-    TRUE = 275,                    /* TRUE  */
-    FALSE = 276,                   /* FALSE  */
-    AND = 277,                     /* AND  */
-    OR = 278,                      /* OR  */
-    NOT = 279,                     /* NOT  */
-    EQ = 280,                      /* EQ  */
-    NEQ = 281,                     /* NEQ  */
-    LE = 282,                      /* LE  */
-    GE = 283,                      /* GE  */
-    LT = 284,                      /* LT  */
-    GT = 285,                      /* GT  */
-    PLUS = 286,                    /* PLUS  */
-    MINUS = 287,                   /* MINUS  */
-    MUL = 288,                     /* MUL  */
-    DIV = 289,                     /* DIV  */
-    BCLASS = 290,                  /* BCLASS  */
-    ECLASS = 291,                  /* ECLASS  */
-    PRIVATE = 292,                 /* PRIVATE  */
-    PUBLIC = 293,                  /* PUBLIC  */
-    PROTECTED = 294,               /* PROTECTED  */
-    NEW = 295,                     /* NEW  */
-    RETURN = 296,                  /* RETURN  */
-    DOT = 297,                     /* DOT  */
-    COMMA = 298,                   /* COMMA  */
-    LEFTP = 299,                   /* LEFTP  */
-    RIGHTP = 300,                  /* RIGHTP  */
-    LEFTB = 301,                   /* LEFTB  */
-    RIGHTB = 302,                  /* RIGHTB  */
-    PRINT = 303,                   /* PRINT  */
-    ID = 304,                      /* ID  */
-    TYPE = 305,                    /* TYPE  */
-    STRING_S = 306,                /* STRING_S  */
-    INT_NR = 307,                  /* INT_NR  */
-    FLOAT_NR = 308,                /* FLOAT_NR  */
-    UMINUS = 309                   /* UMINUS  */
+    TRUE = 274,                    /* TRUE  */
+    FALSE = 275,                   /* FALSE  */
+    AND = 276,                     /* AND  */
+    OR = 277,                      /* OR  */
+    NOT = 278,                     /* NOT  */
+    EQ = 279,                      /* EQ  */
+    NEQ = 280,                     /* NEQ  */
+    LE = 281,                      /* LE  */
+    GE = 282,                      /* GE  */
+    LT = 283,                      /* LT  */
+    GT = 284,                      /* GT  */
+    PLUS = 285,                    /* PLUS  */
+    MINUS = 286,                   /* MINUS  */
+    MUL = 287,                     /* MUL  */
+    DIV = 288,                     /* DIV  */
+    BCLASS = 289,                  /* BCLASS  */
+    ECLASS = 290,                  /* ECLASS  */
+    PRIVATE = 291,                 /* PRIVATE  */
+    PUBLIC = 292,                  /* PUBLIC  */
+    PROTECTED = 293,               /* PROTECTED  */
+    NEW = 294,                     /* NEW  */
+    RETURN = 295,                  /* RETURN  */
+    DOT = 296,                     /* DOT  */
+    COMMA = 297,                   /* COMMA  */
+    LEFTP = 298,                   /* LEFTP  */
+    RIGHTP = 299,                  /* RIGHTP  */
+    LEFTB = 300,                   /* LEFTB  */
+    RIGHTB = 301,                  /* RIGHTB  */
+    PRINT = 302,                   /* PRINT  */
+    ID = 303,                      /* ID  */
+    TYPE = 304,                    /* TYPE  */
+    STRING_S = 305,                /* STRING_S  */
+    INT_NR = 306,                  /* INT_NR  */
+    FLOAT_NR = 307,                /* FLOAT_NR  */
+    UMINUS = 308                   /* UMINUS  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -123,14 +135,15 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 24 "limbaj.y"
+#line 39 "limbaj.y"
 
+     ExprInfo* Expr;
      string* Str;
      int Int;
      float Float;
      vector<Parameter>* Params;
 
-#line 134 "limbaj.tab.h"
+#line 147 "limbaj.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

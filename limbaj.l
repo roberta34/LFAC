@@ -13,7 +13,7 @@ FLOAT_NUMBER [0-9]+\.[0-9]+
 STRING_LIT \"([^\\\"]|\\.)*\"
 
 %%
-"integer"|"float"|"text"|"bool" {yylval.Str = new std::string(yytext); return TYPE;}
+"integer"|"float"|"text"|"bool"|"void" {yylval.Str = new std::string(yytext); return TYPE;}
 "begin_program" {return BPROGRAM;}
 "end_program" {return EPROGRAM;}
 "begin_main" {return BMAIN;}
@@ -30,7 +30,6 @@ STRING_LIT \"([^\\\"]|\\.)*\"
 "from" {return FROM;}
 "to" {return TO;}
 "endfor" {return EFOR;}
-"initialize" {return INITIALIZE;}
 "true" {return TRUE;}
 "false" {return FALSE;}
 "and" {return AND;}  

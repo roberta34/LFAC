@@ -67,12 +67,13 @@
 
 
 /* First part of user prologue.  */
-#line 8 "limbaj.y"
+#line 21 "limbaj.y"
 
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
 #include "symbol_table.hpp"
+#include "ASTnode.hpp"
 extern FILE* yyin;
 extern char* yytext;
 extern int yylineno;
@@ -83,7 +84,8 @@ int errorCount = 0;
 SymbolTable* globalScope=nullptr;
 SymbolTable* currentScope=nullptr;
 
-#line 87 "limbaj.tab.c"
+
+#line 89 "limbaj.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -130,66 +132,68 @@ enum yysymbol_kind_t
   YYSYMBOL_FROM = 16,                      /* FROM  */
   YYSYMBOL_TO = 17,                        /* TO  */
   YYSYMBOL_EFOR = 18,                      /* EFOR  */
-  YYSYMBOL_INITIALIZE = 19,                /* INITIALIZE  */
-  YYSYMBOL_TRUE = 20,                      /* TRUE  */
-  YYSYMBOL_FALSE = 21,                     /* FALSE  */
-  YYSYMBOL_AND = 22,                       /* AND  */
-  YYSYMBOL_OR = 23,                        /* OR  */
-  YYSYMBOL_NOT = 24,                       /* NOT  */
-  YYSYMBOL_EQ = 25,                        /* EQ  */
-  YYSYMBOL_NEQ = 26,                       /* NEQ  */
-  YYSYMBOL_LE = 27,                        /* LE  */
-  YYSYMBOL_GE = 28,                        /* GE  */
-  YYSYMBOL_LT = 29,                        /* LT  */
-  YYSYMBOL_GT = 30,                        /* GT  */
-  YYSYMBOL_PLUS = 31,                      /* PLUS  */
-  YYSYMBOL_MINUS = 32,                     /* MINUS  */
-  YYSYMBOL_MUL = 33,                       /* MUL  */
-  YYSYMBOL_DIV = 34,                       /* DIV  */
-  YYSYMBOL_BCLASS = 35,                    /* BCLASS  */
-  YYSYMBOL_ECLASS = 36,                    /* ECLASS  */
-  YYSYMBOL_PRIVATE = 37,                   /* PRIVATE  */
-  YYSYMBOL_PUBLIC = 38,                    /* PUBLIC  */
-  YYSYMBOL_PROTECTED = 39,                 /* PROTECTED  */
-  YYSYMBOL_NEW = 40,                       /* NEW  */
-  YYSYMBOL_RETURN = 41,                    /* RETURN  */
-  YYSYMBOL_DOT = 42,                       /* DOT  */
-  YYSYMBOL_COMMA = 43,                     /* COMMA  */
-  YYSYMBOL_LEFTP = 44,                     /* LEFTP  */
-  YYSYMBOL_RIGHTP = 45,                    /* RIGHTP  */
-  YYSYMBOL_LEFTB = 46,                     /* LEFTB  */
-  YYSYMBOL_RIGHTB = 47,                    /* RIGHTB  */
-  YYSYMBOL_PRINT = 48,                     /* PRINT  */
-  YYSYMBOL_ID = 49,                        /* ID  */
-  YYSYMBOL_TYPE = 50,                      /* TYPE  */
-  YYSYMBOL_STRING_S = 51,                  /* STRING_S  */
-  YYSYMBOL_INT_NR = 52,                    /* INT_NR  */
-  YYSYMBOL_FLOAT_NR = 53,                  /* FLOAT_NR  */
-  YYSYMBOL_UMINUS = 54,                    /* UMINUS  */
-  YYSYMBOL_55_ = 55,                       /* ';'  */
-  YYSYMBOL_YYACCEPT = 56,                  /* $accept  */
-  YYSYMBOL_program = 57,                   /* program  */
-  YYSYMBOL_global_declarations = 58,       /* global_declarations  */
-  YYSYMBOL_decl = 59,                      /* decl  */
-  YYSYMBOL_60_1 = 60,                      /* $@1  */
-  YYSYMBOL_list_param = 61,                /* list_param  */
-  YYSYMBOL_class_body = 62,                /* class_body  */
-  YYSYMBOL_class_member = 63,              /* class_member  */
-  YYSYMBOL_acces_specifier = 64,           /* acces_specifier  */
-  YYSYMBOL_main_block = 65,                /* main_block  */
-  YYSYMBOL_list = 66,                      /* list  */
-  YYSYMBOL_statement = 67,                 /* statement  */
-  YYSYMBOL_assign = 68,                    /* assign  */
-  YYSYMBOL_declaration = 69,               /* declaration  */
-  YYSYMBOL_function_call = 70,             /* function_call  */
-  YYSYMBOL_if_statement = 71,              /* if_statement  */
-  YYSYMBOL_for_statement = 72,             /* for_statement  */
-  YYSYMBOL_print_statement = 73,           /* print_statement  */
-  YYSYMBOL_return_statement = 74,          /* return_statement  */
-  YYSYMBOL_call_parametres = 75,           /* call_parametres  */
-  YYSYMBOL_expression = 76,                /* expression  */
-  YYSYMBOL_while_statement = 77,           /* while_statement  */
-  YYSYMBOL_bool_expression = 78            /* bool_expression  */
+  YYSYMBOL_TRUE = 19,                      /* TRUE  */
+  YYSYMBOL_FALSE = 20,                     /* FALSE  */
+  YYSYMBOL_AND = 21,                       /* AND  */
+  YYSYMBOL_OR = 22,                        /* OR  */
+  YYSYMBOL_NOT = 23,                       /* NOT  */
+  YYSYMBOL_EQ = 24,                        /* EQ  */
+  YYSYMBOL_NEQ = 25,                       /* NEQ  */
+  YYSYMBOL_LE = 26,                        /* LE  */
+  YYSYMBOL_GE = 27,                        /* GE  */
+  YYSYMBOL_LT = 28,                        /* LT  */
+  YYSYMBOL_GT = 29,                        /* GT  */
+  YYSYMBOL_PLUS = 30,                      /* PLUS  */
+  YYSYMBOL_MINUS = 31,                     /* MINUS  */
+  YYSYMBOL_MUL = 32,                       /* MUL  */
+  YYSYMBOL_DIV = 33,                       /* DIV  */
+  YYSYMBOL_BCLASS = 34,                    /* BCLASS  */
+  YYSYMBOL_ECLASS = 35,                    /* ECLASS  */
+  YYSYMBOL_PRIVATE = 36,                   /* PRIVATE  */
+  YYSYMBOL_PUBLIC = 37,                    /* PUBLIC  */
+  YYSYMBOL_PROTECTED = 38,                 /* PROTECTED  */
+  YYSYMBOL_NEW = 39,                       /* NEW  */
+  YYSYMBOL_RETURN = 40,                    /* RETURN  */
+  YYSYMBOL_DOT = 41,                       /* DOT  */
+  YYSYMBOL_COMMA = 42,                     /* COMMA  */
+  YYSYMBOL_LEFTP = 43,                     /* LEFTP  */
+  YYSYMBOL_RIGHTP = 44,                    /* RIGHTP  */
+  YYSYMBOL_LEFTB = 45,                     /* LEFTB  */
+  YYSYMBOL_RIGHTB = 46,                    /* RIGHTB  */
+  YYSYMBOL_PRINT = 47,                     /* PRINT  */
+  YYSYMBOL_ID = 48,                        /* ID  */
+  YYSYMBOL_TYPE = 49,                      /* TYPE  */
+  YYSYMBOL_STRING_S = 50,                  /* STRING_S  */
+  YYSYMBOL_INT_NR = 51,                    /* INT_NR  */
+  YYSYMBOL_FLOAT_NR = 52,                  /* FLOAT_NR  */
+  YYSYMBOL_UMINUS = 53,                    /* UMINUS  */
+  YYSYMBOL_54_ = 54,                       /* ';'  */
+  YYSYMBOL_YYACCEPT = 55,                  /* $accept  */
+  YYSYMBOL_program = 56,                   /* program  */
+  YYSYMBOL_global_declarations = 57,       /* global_declarations  */
+  YYSYMBOL_decl = 58,                      /* decl  */
+  YYSYMBOL_59_1 = 59,                      /* $@1  */
+  YYSYMBOL_60_2 = 60,                      /* $@2  */
+  YYSYMBOL_61_3 = 61,                      /* $@3  */
+  YYSYMBOL_list_param = 62,                /* list_param  */
+  YYSYMBOL_class_body = 63,                /* class_body  */
+  YYSYMBOL_class_member = 64,              /* class_member  */
+  YYSYMBOL_65_4 = 65,                      /* $@4  */
+  YYSYMBOL_66_5 = 66,                      /* $@5  */
+  YYSYMBOL_acces_specifier = 67,           /* acces_specifier  */
+  YYSYMBOL_main_block = 68,                /* main_block  */
+  YYSYMBOL_list = 69,                      /* list  */
+  YYSYMBOL_statement = 70,                 /* statement  */
+  YYSYMBOL_assign = 71,                    /* assign  */
+  YYSYMBOL_function_call = 72,             /* function_call  */
+  YYSYMBOL_if_statement = 73,              /* if_statement  */
+  YYSYMBOL_for_statement = 74,             /* for_statement  */
+  YYSYMBOL_print_statement = 75,           /* print_statement  */
+  YYSYMBOL_return_statement = 76,          /* return_statement  */
+  YYSYMBOL_call_parametres = 77,           /* call_parametres  */
+  YYSYMBOL_expression = 78,                /* expression  */
+  YYSYMBOL_while_statement = 79,           /* while_statement  */
+  YYSYMBOL_bool_expression = 80            /* bool_expression  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -515,21 +519,21 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  7
+#define YYFINAL  8
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   299
+#define YYLAST   347
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  56
+#define YYNTOKENS  55
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  23
+#define YYNNTS  26
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  70
+#define YYNRULES  80
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  162
+#define YYNSTATES  190
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   309
+#define YYMAXUTOK   308
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -548,7 +552,7 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,    55,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,    54,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -573,21 +577,22 @@ static const yytype_int8 yytranslate[] =
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
       35,    36,    37,    38,    39,    40,    41,    42,    43,    44,
-      45,    46,    47,    48,    49,    50,    51,    52,    53,    54
+      45,    46,    47,    48,    49,    50,    51,    52,    53
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    65,    65,    68,    69,    72,    77,    97,    96,   109,
-     116,   127,   127,   129,   136,   154,   160,   167,   168,   169,
-     172,   176,   177,   180,   181,   182,   183,   184,   185,   186,
-     187,   190,   196,   203,   207,   214,   215,   218,   224,   226,
-     228,   229,   232,   233,   234,   235,   236,   237,   238,   243,
-     247,   248,   249,   250,   251,   252,   253,   254,   255,   256,
-     259,   262,   263,   264,   265,   266,   267,   268,   269,   270,
-     271
+       0,    83,    83,    86,    87,    90,   101,   115,   132,   131,
+     151,   150,   179,   178,   196,   211,   219,   231,   231,   233,
+     240,   259,   266,   273,   272,   286,   285,   305,   313,   314,
+     315,   318,   322,   323,   326,   327,   328,   329,   330,   331,
+     332,   333,   336,   356,   387,   415,   453,   455,   459,   467,
+     475,   485,   493,   502,   510,   520,   521,   522,   523,   524,
+     525,   537,   562,   571,   585,   600,   613,   627,   641,   662,
+     675,   679,   687,   695,   703,   711,   719,   727,   735,   743,
+     749
 };
 #endif
 
@@ -605,16 +610,17 @@ static const char *const yytname[] =
 {
   "\"end of file\"", "error", "\"invalid token\"", "BPROGRAM", "EPROGRAM",
   "BMAIN", "EMAIN", "ASSIGN", "BIF", "THEN", "ELSE", "EIF", "BWHILE", "DO",
-  "EWHILE", "BFOR", "FROM", "TO", "EFOR", "INITIALIZE", "TRUE", "FALSE",
-  "AND", "OR", "NOT", "EQ", "NEQ", "LE", "GE", "LT", "GT", "PLUS", "MINUS",
-  "MUL", "DIV", "BCLASS", "ECLASS", "PRIVATE", "PUBLIC", "PROTECTED",
-  "NEW", "RETURN", "DOT", "COMMA", "LEFTP", "RIGHTP", "LEFTB", "RIGHTB",
-  "PRINT", "ID", "TYPE", "STRING_S", "INT_NR", "FLOAT_NR", "UMINUS", "';'",
-  "$accept", "program", "global_declarations", "decl", "$@1", "list_param",
-  "class_body", "class_member", "acces_specifier", "main_block", "list",
-  "statement", "assign", "declaration", "function_call", "if_statement",
-  "for_statement", "print_statement", "return_statement",
-  "call_parametres", "expression", "while_statement", "bool_expression", YY_NULLPTR
+  "EWHILE", "BFOR", "FROM", "TO", "EFOR", "TRUE", "FALSE", "AND", "OR",
+  "NOT", "EQ", "NEQ", "LE", "GE", "LT", "GT", "PLUS", "MINUS", "MUL",
+  "DIV", "BCLASS", "ECLASS", "PRIVATE", "PUBLIC", "PROTECTED", "NEW",
+  "RETURN", "DOT", "COMMA", "LEFTP", "RIGHTP", "LEFTB", "RIGHTB", "PRINT",
+  "ID", "TYPE", "STRING_S", "INT_NR", "FLOAT_NR", "UMINUS", "';'",
+  "$accept", "program", "global_declarations", "decl", "$@1", "$@2", "$@3",
+  "list_param", "class_body", "class_member", "$@4", "$@5",
+  "acces_specifier", "main_block", "list", "statement", "assign",
+  "function_call", "if_statement", "for_statement", "print_statement",
+  "return_statement", "call_parametres", "expression", "while_statement",
+  "bool_expression", YY_NULLPTR
 };
 
 static const char *
@@ -624,7 +630,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-89)
+#define YYPACT_NINF (-116)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -638,23 +644,25 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-      14,   -30,     3,     4,    13,    -3,   -89,   -89,   -89,   -34,
-     154,   -89,    35,    38,    -1,   -89,   172,   172,    32,    50,
-     186,    54,     0,    10,    48,   -89,   -89,   -89,   -89,   -89,
-     -89,   -89,   -89,   -89,    40,    57,    49,   -89,   -89,   172,
-     186,    61,   172,    53,   -89,   -89,   -89,   -89,   255,     5,
-     192,    97,   -89,   186,   186,    23,   186,   186,    78,   186,
-     -89,    83,   -89,   -89,   -89,   -89,    87,   106,   -89,    89,
-     -89,   108,   109,   265,   -89,   -89,   -89,   218,   -14,   114,
-     186,   186,   186,   186,   186,   186,   186,   186,   186,   186,
-     186,   186,   154,   172,   172,   154,   186,   200,    92,   153,
-      23,   121,    59,    23,   -89,   -25,   131,   -89,   122,   123,
-     -89,   -89,   -89,   121,   200,   146,   200,   200,   200,   200,
-     200,   200,     1,     1,   -89,   -89,    81,    -5,   -89,   148,
-      93,   236,   -89,   186,   186,   -89,    -1,   -89,   -89,     8,
-     -89,   154,   -89,   -89,   186,    66,    23,    76,    -1,   -89,
-     140,   242,   -89,   119,    90,   -89,   154,   -89,   127,   142,
-     -89,   -89
+      28,    13,    39,    38,    44,    59,     1,  -116,  -116,  -116,
+      57,   -39,   211,  -116,   110,    80,  -116,   134,  -116,   244,
+     244,    91,   218,   120,     5,  -116,    11,  -116,  -116,   113,
+    -116,  -116,  -116,  -116,  -116,  -116,   105,    54,   128,   -26,
+    -116,  -116,   244,   254,   142,   244,   129,  -116,  -116,  -116,
+     314,    33,   137,   191,   254,   254,  -116,   -22,   244,   254,
+     172,   254,  -116,  -116,  -116,  -116,  -116,  -116,   184,   176,
+    -116,   133,  -116,  -116,  -116,   175,    67,   314,  -116,  -116,
+    -116,   283,    -8,   192,   254,   254,   254,   254,   254,   254,
+     254,   254,   254,   254,   211,   244,   244,   211,   254,   248,
+      72,  -116,   293,     8,    43,     0,   122,   248,    37,   208,
+    -116,   200,   211,   214,  -116,  -116,  -116,  -116,  -116,   248,
+     248,   248,   248,   248,   248,   256,   256,  -116,  -116,    86,
+     239,  -116,   235,    75,   222,   217,   228,  -116,   254,   254,
+     254,  -116,   216,  -116,  -116,    41,    98,  -116,   211,   211,
+     230,  -116,   254,  -116,  -116,    97,   156,   248,   166,   152,
+    -116,  -116,   140,   145,  -116,   198,  -116,  -116,   232,    95,
+     202,  -116,   236,   211,  -116,  -116,  -116,   117,  -116,   157,
+     211,  -116,  -116,   237,   169,   211,  -116,  -116,   187,  -116
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -662,39 +670,41 @@ static const yytype_int16 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     0,     0,     0,     0,     0,     3,     1,     7,     0,
-       0,     4,     0,     0,     0,     5,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,    23,    24,    25,    26,    28,
-      29,    30,    27,     2,     0,     0,     0,    45,    46,     0,
-       0,     0,     0,    47,    44,    42,    43,    50,     0,     0,
-       0,     0,    32,     0,     0,    39,     0,     0,     0,     0,
-      20,     0,    21,    17,    18,    19,     0,     0,    12,     0,
-       9,     0,     0,    59,    69,    53,    49,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,    59,     0,     0,
-      31,     0,     0,    40,    22,     0,     0,    11,     0,     0,
-       6,    56,    70,    48,    57,    58,    61,    62,    64,    66,
-      63,    65,    51,    52,    54,    55,     0,     0,    67,    68,
-       0,     0,    38,     0,     0,    33,     0,    13,     8,     0,
-      10,     0,    35,    60,     0,     0,    41,     0,     0,    15,
-       0,     0,    34,     0,     0,    36,     0,    14,     0,     0,
-      16,    37
+       0,     0,     0,     0,     0,     0,     0,     3,     1,    12,
+       0,     0,     0,     4,     0,     0,    14,     0,     5,     0,
+       0,     0,     0,     0,     0,    35,     0,    32,    34,     0,
+      37,    39,    40,    41,    38,     2,     0,     0,     0,     0,
+      58,    59,     0,     0,     0,     0,    60,    57,    55,    56,
+       0,     0,     0,     0,     0,     0,    52,     0,     0,     0,
+       0,     0,    31,    33,    36,    28,    29,    30,     0,     0,
+      18,     0,     8,     6,    15,     0,     0,    69,    79,    65,
+      62,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,    69,
+       0,    51,     0,     0,     0,     0,     0,    53,     0,     0,
+      17,     0,     0,     0,    10,     7,    68,    80,    61,    71,
+      72,    74,    76,    73,    75,    63,    64,    66,    67,     0,
+      32,    77,    78,     0,     0,     0,     0,    42,     0,     0,
+       0,    44,     0,    19,    13,     0,     0,    16,     0,     0,
+       0,    70,     0,    49,    50,     0,     0,    54,     0,     0,
+      21,     9,     0,     0,    46,     0,    43,    45,     0,     0,
+       0,    11,     0,     0,    20,    23,    27,     0,    47,     0,
+       0,    25,    22,     0,     0,     0,    48,    24,     0,    26
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int16 yypgoto[] =
 {
-     -89,   -89,   -89,   189,   -89,   -88,   -89,   130,   -89,   -89,
-     -80,    -9,   -89,   -89,   -10,   -89,   -89,   -89,   -89,    67,
-     -16,   -89,    -6
+    -116,  -116,  -116,   241,  -116,  -116,  -116,  -115,  -116,   207,
+    -116,  -116,  -116,  -116,   -92,   -12,  -116,  -116,  -116,  -116,
+    -116,  -116,   159,   -21,  -116,   -17
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
-static const yytype_int8 yydefgoto[] =
+static const yytype_uint8 yydefgoto[] =
 {
-       0,     2,     5,     6,    13,    36,    67,    68,    69,    12,
-      23,    61,    25,    26,    47,    28,    29,    30,    31,   102,
-      48,    32,    49
+       0,     2,     6,    25,   112,   148,    15,    39,    69,    70,
+     180,   185,    71,    14,    26,    63,    28,    29,    30,    31,
+      32,    33,   106,    50,    34,    51
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -702,117 +712,131 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-      27,    24,    10,     7,    55,     3,   142,    57,    93,    94,
-      14,    50,   126,    27,    92,   130,    60,     1,    16,   136,
-       4,    15,    17,    73,    75,    18,    77,    93,    94,    19,
-     137,   112,     3,    74,    90,    91,    78,    97,    98,    33,
-      99,   100,    58,   103,    59,    80,    81,     4,   147,    35,
-      62,    20,   148,     8,    88,    89,    90,    91,    21,    22,
-     154,   150,     9,   149,   114,   115,   116,   117,   118,   119,
-     120,   121,   122,   123,   124,   125,   159,    63,    64,    65,
-     131,    51,    27,   127,    34,    27,    24,   128,   129,    16,
-      66,   141,    71,    17,    72,    79,    18,    59,    56,    52,
-      19,    16,   134,    62,   135,    17,    70,   143,    18,   134,
-      76,   152,    19,    96,    80,    81,    27,   103,   146,    71,
-      27,   153,    20,    88,    89,    90,    91,   101,   151,    21,
-      22,    27,    24,    71,    20,   158,   105,   111,   104,   108,
-      27,    21,    22,    63,    64,    65,    27,    24,    16,    27,
-      16,   155,    17,   106,    17,    18,    66,    18,   109,    19,
-     161,    19,    16,   113,   110,   133,    17,   138,    80,    18,
-      93,   139,   140,    19,   157,    80,    81,    88,    89,    90,
-      91,    20,   160,    20,    88,    89,    90,    91,    21,    22,
-      21,    22,    37,    38,    11,    20,    39,   107,   132,     0,
-     145,     0,    21,    22,    40,    95,    37,    38,     0,     0,
-      53,     0,    41,     0,    93,    94,    42,     0,    40,     0,
-       0,    43,     0,    44,    45,    46,    41,     0,     0,     0,
-      54,    88,    89,    90,    91,    43,     0,    44,    45,    46,
-      80,    81,     0,    82,    83,    84,    85,    86,    87,    88,
-      89,    90,    91,   144,     0,   156,     0,     0,    80,    81,
-       0,     0,     0,   111,    80,    81,     0,    88,    89,    90,
-      91,     0,     0,    88,    89,    90,    91,    80,    81,     0,
-      82,    83,    84,    85,    86,    87,    88,    89,    90,    91,
-      82,    83,    84,    85,    86,    87,    88,    89,    90,    91
+      27,    57,   129,    52,    17,   133,    12,   138,    90,    91,
+      92,    93,    59,    95,    96,    18,    75,    62,    76,    19,
+     146,    77,    79,    20,    81,    78,    21,   158,    82,    95,
+      96,     1,   101,    99,   100,     3,   117,   102,   104,     8,
+     107,   103,    94,   139,   170,     3,    60,     3,    61,     4,
+       5,    22,   136,    10,    95,    96,   162,   163,    23,    24,
+       5,     4,     5,   119,   120,   121,   122,   123,   124,   125,
+     126,   127,   128,    90,    91,    92,    93,   134,   131,   132,
+     142,   179,   130,    19,   159,    27,     9,    20,   184,   151,
+      21,   143,    10,   188,    19,   160,   149,   137,    20,    72,
+      27,    21,    90,    91,    92,    93,    19,    11,    73,     3,
+      20,    16,   114,    21,    35,    22,   116,   155,   107,   157,
+       3,   115,    23,    24,     5,    36,    22,    90,    91,    92,
+      93,   165,     3,    23,    24,     5,    27,    27,    22,    53,
+     175,    65,    66,    67,   161,    23,    24,     5,    19,   176,
+      97,   166,    20,    19,    68,    21,   172,    20,    95,    96,
+      21,    27,   181,    58,   140,    19,   141,    64,    27,    20,
+      83,   182,    21,    27,     3,   183,    74,    19,    37,     3,
+      22,    20,   111,    38,    21,    22,   171,    23,    24,     5,
+      80,     3,    23,    24,     5,    19,   169,    22,   140,    20,
+     167,    38,    21,     3,    23,    24,     5,    98,    75,    22,
+     168,   173,    65,    66,    67,   187,    23,    24,     5,    19,
+     105,     3,   109,    20,   113,    68,    21,    22,    90,    91,
+      92,    93,   108,   189,    23,    24,     5,    40,    41,   152,
+     118,    54,     7,   144,    75,     3,   177,    13,   145,    43,
+     150,    22,    90,    91,    92,    93,    95,    44,    23,    24,
+       5,    55,   147,    40,    41,    38,    46,    42,    47,    48,
+      49,   153,    56,    40,    41,    43,   110,    54,    90,    91,
+      92,    93,   154,    44,   164,    43,   174,    45,    92,    93,
+     178,   186,    46,    44,    47,    48,    49,    55,   156,     0,
+       0,     0,    46,     0,    47,    48,    49,    84,    85,    86,
+      87,    88,    89,    90,    91,    92,    93,    84,    85,    86,
+      87,    88,    89,    90,    91,    92,    93,   116,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,   135,    84,    85,
+      86,    87,    88,    89,    90,    91,    92,    93
 };
 
 static const yytype_int16 yycheck[] =
 {
-      10,    10,     5,     0,    20,    35,    11,     7,    22,    23,
-      44,    17,    92,    23,     9,    95,     6,     3,     8,    44,
-      50,    55,    12,    39,    40,    15,    42,    22,    23,    19,
-      55,    45,    35,    39,    33,    34,    42,    53,    54,     4,
-      56,    57,    42,    59,    44,    22,    23,    50,   136,    50,
-      55,    41,    44,    49,    31,    32,    33,    34,    48,    49,
-     148,   141,    49,    55,    80,    81,    82,    83,    84,    85,
-      86,    87,    88,    89,    90,    91,   156,    37,    38,    39,
-      96,    49,    92,    92,    46,    95,    95,    93,    94,     8,
-      50,    10,    43,    12,    45,    42,    15,    44,    44,    49,
-      19,     8,    43,    55,    45,    12,    49,    14,    15,    43,
-      49,    45,    19,    16,    22,    23,   126,   133,   134,    43,
-     130,    45,    41,    31,    32,    33,    34,    49,   144,    48,
-      49,   141,   141,    43,    41,    45,    49,    45,    55,    50,
-     150,    48,    49,    37,    38,    39,   156,   156,     8,   159,
-       8,    11,    12,    47,    12,    15,    50,    15,    50,    19,
-      18,    19,     8,    49,    55,    44,    12,    36,    22,    15,
-      22,    49,    49,    19,    55,    22,    23,    31,    32,    33,
-      34,    41,    55,    41,    31,    32,    33,    34,    48,    49,
-      48,    49,    20,    21,     5,    41,    24,    67,    45,    -1,
-     133,    -1,    48,    49,    32,    13,    20,    21,    -1,    -1,
-      24,    -1,    40,    -1,    22,    23,    44,    -1,    32,    -1,
-      -1,    49,    -1,    51,    52,    53,    40,    -1,    -1,    -1,
-      44,    31,    32,    33,    34,    49,    -1,    51,    52,    53,
-      22,    23,    -1,    25,    26,    27,    28,    29,    30,    31,
-      32,    33,    34,    17,    -1,    13,    -1,    -1,    22,    23,
-      -1,    -1,    -1,    45,    22,    23,    -1,    31,    32,    33,
-      34,    -1,    -1,    31,    32,    33,    34,    22,    23,    -1,
-      25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-      25,    26,    27,    28,    29,    30,    31,    32,    33,    34
+      12,    22,    94,    20,    43,    97,     5,     7,    30,    31,
+      32,    33,     7,    21,    22,    54,    42,     6,    44,     8,
+     112,    42,    43,    12,    45,    42,    15,   142,    45,    21,
+      22,     3,    54,    54,    55,    34,    44,    58,    59,     0,
+      61,    58,     9,    43,   159,    34,    41,    34,    43,    48,
+      49,    40,    44,    48,    21,    22,   148,   149,    47,    48,
+      49,    48,    49,    84,    85,    86,    87,    88,    89,    90,
+      91,    92,    93,    30,    31,    32,    33,    98,    95,    96,
+      43,   173,    94,     8,    43,    97,    48,    12,   180,    14,
+      15,    54,    48,   185,     8,    54,    10,    54,    12,    45,
+     112,    15,    30,    31,    32,    33,     8,    48,    54,    34,
+      12,    54,    45,    15,     4,    40,    44,   138,   139,   140,
+      34,    54,    47,    48,    49,    45,    40,    30,    31,    32,
+      33,   152,    34,    47,    48,    49,   148,   149,    40,    48,
+      45,    36,    37,    38,    46,    47,    48,    49,     8,    54,
+      13,    54,    12,     8,    49,    15,    11,    12,    21,    22,
+      15,   173,    45,    43,    42,     8,    44,    54,   180,    12,
+      41,    54,    15,   185,    34,    18,    48,     8,    44,    34,
+      40,    12,    49,    49,    15,    40,    46,    47,    48,    49,
+      48,    34,    47,    48,    49,     8,    44,    40,    42,    12,
+      44,    49,    15,    34,    47,    48,    49,    16,    42,    40,
+      44,    13,    36,    37,    38,    46,    47,    48,    49,     8,
+      48,    34,    46,    12,    49,    49,    15,    40,    30,    31,
+      32,    33,    48,    46,    47,    48,    49,    19,    20,    17,
+      48,    23,     1,    35,    42,    34,    44,     6,    48,    31,
+      11,    40,    30,    31,    32,    33,    21,    39,    47,    48,
+      49,    43,    48,    19,    20,    49,    48,    23,    50,    51,
+      52,    54,    54,    19,    20,    31,    69,    23,    30,    31,
+      32,    33,    54,    39,    54,    31,    54,    43,    32,    33,
+      54,    54,    48,    39,    50,    51,    52,    43,   139,    -1,
+      -1,    -1,    48,    -1,    50,    51,    52,    24,    25,    26,
+      27,    28,    29,    30,    31,    32,    33,    24,    25,    26,
+      27,    28,    29,    30,    31,    32,    33,    44,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    44,    24,    25,
+      26,    27,    28,    29,    30,    31,    32,    33
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     3,    57,    35,    50,    58,    59,     0,    49,    49,
-       5,    59,    65,    60,    44,    55,     8,    12,    15,    19,
-      41,    48,    49,    66,    67,    68,    69,    70,    71,    72,
-      73,    74,    77,     4,    46,    50,    61,    20,    21,    24,
-      32,    40,    44,    49,    51,    52,    53,    70,    76,    78,
-      78,    49,    49,    24,    44,    76,    44,     7,    42,    44,
-       6,    67,    55,    37,    38,    39,    50,    62,    63,    64,
-      49,    43,    45,    76,    78,    76,    49,    76,    78,    42,
-      22,    23,    25,    26,    27,    28,    29,    30,    31,    32,
-      33,    34,     9,    22,    23,    13,    16,    76,    76,    76,
-      76,    49,    75,    76,    55,    49,    47,    63,    50,    50,
-      55,    45,    45,    49,    76,    76,    76,    76,    76,    76,
-      76,    76,    76,    76,    76,    76,    66,    67,    78,    78,
-      66,    76,    45,    44,    43,    45,    44,    55,    36,    49,
-      49,    10,    11,    14,    17,    75,    76,    61,    44,    55,
-      66,    76,    45,    45,    61,    11,    13,    55,    45,    66,
-      55,    18
+       0,     3,    56,    34,    48,    49,    57,    58,     0,    48,
+      48,    48,     5,    58,    68,    61,    54,    43,    54,     8,
+      12,    15,    40,    47,    48,    58,    69,    70,    71,    72,
+      73,    74,    75,    76,    79,     4,    45,    44,    49,    62,
+      19,    20,    23,    31,    39,    43,    48,    50,    51,    52,
+      78,    80,    80,    48,    23,    43,    54,    78,    43,     7,
+      41,    43,     6,    70,    54,    36,    37,    38,    49,    63,
+      64,    67,    45,    54,    48,    42,    44,    78,    80,    78,
+      48,    78,    80,    41,    24,    25,    26,    27,    28,    29,
+      30,    31,    32,    33,     9,    21,    22,    13,    16,    78,
+      78,    54,    78,    80,    78,    48,    77,    78,    48,    46,
+      64,    49,    59,    49,    45,    54,    44,    44,    48,    78,
+      78,    78,    78,    78,    78,    78,    78,    78,    78,    69,
+      70,    80,    80,    69,    78,    44,    44,    54,     7,    43,
+      42,    44,    43,    54,    35,    48,    69,    48,    60,    10,
+      11,    14,    17,    54,    54,    78,    77,    78,    62,    43,
+      54,    46,    69,    69,    54,    78,    54,    44,    44,    44,
+      62,    46,    11,    13,    54,    45,    54,    44,    54,    69,
+      65,    45,    54,    18,    69,    66,    54,    46,    69,    46
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    56,    57,    58,    58,    59,    59,    60,    59,    61,
-      61,    62,    62,    63,    63,    63,    63,    64,    64,    64,
-      65,    66,    66,    67,    67,    67,    67,    67,    67,    67,
-      67,    68,    69,    70,    70,    71,    71,    72,    73,    74,
-      75,    75,    76,    76,    76,    76,    76,    76,    76,    76,
-      76,    76,    76,    76,    76,    76,    76,    76,    76,    76,
-      77,    78,    78,    78,    78,    78,    78,    78,    78,    78,
-      78
+       0,    55,    56,    57,    57,    58,    58,    58,    59,    58,
+      60,    58,    61,    58,    58,    62,    62,    63,    63,    64,
+      64,    64,    64,    65,    64,    66,    64,    64,    67,    67,
+      67,    68,    69,    69,    70,    70,    70,    70,    70,    70,
+      70,    70,    71,    71,    72,    72,    73,    73,    74,    75,
+      75,    76,    76,    77,    77,    78,    78,    78,    78,    78,
+      78,    78,    78,    78,    78,    78,    78,    78,    78,    78,
+      79,    80,    80,    80,    80,    80,    80,    80,    80,    80,
+      80
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     4,     1,     2,     3,     6,     0,     7,     2,
-       4,     2,     1,     3,     6,     4,     7,     1,     1,     1,
-       3,     2,     3,     1,     1,     1,     1,     1,     1,     1,
-       1,     3,     2,     4,     6,     5,     7,     9,     4,     2,
-       1,     3,     1,     1,     1,     1,     1,     1,     3,     2,
-       1,     3,     3,     2,     3,     3,     3,     3,     3,     2,
+       0,     2,     4,     1,     2,     3,     5,     6,     0,     8,
+       0,     9,     0,     7,     3,     2,     4,     2,     1,     3,
+       6,     4,     7,     0,     9,     0,    10,     6,     1,     1,
+       1,     3,     1,     2,     1,     1,     2,     1,     1,     1,
+       1,     1,     4,     6,     4,     6,     6,     8,    10,     5,
+       5,     3,     2,     1,     3,     1,     1,     1,     1,     1,
+       1,     3,     2,     3,     3,     2,     3,     3,     3,     2,
        5,     3,     3,     3,     3,     3,     3,     3,     3,     2,
        3
 };
@@ -1278,208 +1302,859 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: BPROGRAM global_declarations main_block EPROGRAM  */
-#line 65 "limbaj.y"
+#line 83 "limbaj.y"
                                                            {if (errorCount == 0) cout<< "The program is correct!" << endl;}
-#line 1284 "limbaj.tab.c"
+#line 1308 "limbaj.tab.c"
+    break;
+
+  case 3: /* global_declarations: decl  */
+#line 86 "limbaj.y"
+                            { currentScope=globalScope; }
+#line 1314 "limbaj.tab.c"
     break;
 
   case 5: /* decl: TYPE ID ';'  */
-#line 72 "limbaj.y"
-                          { 
-                              currentScope->addVariable(*(yyvsp[-1].Str),*(yyvsp[-2].Str),"-");
+#line 90 "limbaj.y"
+                          {   if(currentScope->lookupLocal(*(yyvsp[-1].Str)) != nullptr){
+                                   cout<<"Eroare de semantica: variabila '"<<*(yyvsp[-1].Str)<<"' este deja declarata la linia "<<yylineno<<endl;
+                                   errorCount++;
+                              }
+                              else
+                              {
+                                   currentScope->addVariable(*(yyvsp[-1].Str),*(yyvsp[-2].Str),"-");
+                              }
                               delete (yyvsp[-2].Str);
                               delete (yyvsp[-1].Str);
                           }
-#line 1294 "limbaj.tab.c"
+#line 1330 "limbaj.tab.c"
     break;
 
-  case 6: /* decl: TYPE ID LEFTP list_param RIGHTP ';'  */
-#line 78 "limbaj.y"
+  case 6: /* decl: TYPE ID LEFTP RIGHTP ';'  */
+#line 102 "limbaj.y"
                {
-                    vector<Parameter> params = *(yyvsp[-2].Params);
+                    if(currentScope->lookupLocal(*(yyvsp[-3].Str))){
+                    cout<<"Eroare de semantica: functia '"<<*(yyvsp[-3].Str)<<"' este deja declarata la linia "<<yylineno<<endl;
+                    errorCount++;
+                    } 
+                    else {
+                         vector<Parameter> params; 
+                         currentScope->addFunction(*(yyvsp[-3].Str), *(yyvsp[-4].Str), params);
+                         
+                         delete (yyvsp[-4].Str);
+                         delete (yyvsp[-3].Str);
+                         }
+          }
+#line 1348 "limbaj.tab.c"
+    break;
 
-                    currentScope->addFunction(*(yyvsp[-4].Str), *(yyvsp[-5].Str), params);
+  case 7: /* decl: TYPE ID LEFTP list_param RIGHTP ';'  */
+#line 116 "limbaj.y"
+               {
+                    if(currentScope->lookupLocal(*(yyvsp[-4].Str))){
+                                   cout<<"Eroare de semantica: functia '"<<*(yyvsp[-4].Str)<<"' este deja declarata la linia "<<yylineno<<endl;
+                                   errorCount++;
+                              }
+                    else
+                    {
+                         vector<Parameter> params = *(yyvsp[-2].Params);
 
-                    SymbolTable* saved = currentScope;
-                    currentScope = currentScope->createChild("function " + *(yyvsp[-4].Str));
-
-                    for (const auto& p : params) {
-                    currentScope->addVariable(p.name, p.type, "-");
+                         currentScope->addFunction(*(yyvsp[-4].Str), *(yyvsp[-5].Str), params);
+                         delete (yyvsp[-2].Params);
                     }
-
-                    currentScope = saved;
-
                     delete (yyvsp[-5].Str);
                     delete (yyvsp[-4].Str);
-                    delete (yyvsp[-2].Params);
                }
-#line 1317 "limbaj.tab.c"
+#line 1368 "limbaj.tab.c"
     break;
 
-  case 7: /* $@1: %empty  */
-#line 97 "limbaj.y"
+  case 8: /* $@1: %empty  */
+#line 132 "limbaj.y"
                {
-
-                    currentScope->addClass(*(yyvsp[0].Str));
-                    currentScope=currentScope->createChild("class "+*(yyvsp[0].Str));
+                     if(currentScope->lookupLocal(*(yyvsp[-3].Str))){
+                         cout<<"Eroare de semantica: functia '"<<*(yyvsp[-3].Str)<<"' este deja declarata la linia "<<yylineno<<endl;
+                         errorCount++;
+                    } 
+                    else {
+                         vector<Parameter> params;
+                         currentScope->addFunction(*(yyvsp[-3].Str), *(yyvsp[-4].Str), params);
+                         currentScope=currentScope->createChild("function "+*(yyvsp[-3].Str));
+                         delete (yyvsp[-4].Str);
+                         delete (yyvsp[-3].Str);
+                         }
                }
-#line 1327 "limbaj.tab.c"
+#line 1386 "limbaj.tab.c"
     break;
 
-  case 8: /* decl: BCLASS ID $@1 LEFTB class_body RIGHTB ECLASS  */
-#line 103 "limbaj.y"
+  case 9: /* decl: TYPE ID LEFTP RIGHTP LEFTB $@1 list RIGHTB  */
+#line 146 "limbaj.y"
+               {
+                    if(currentScope)
+                         currentScope=currentScope->getParent();
+               }
+#line 1395 "limbaj.tab.c"
+    break;
+
+  case 10: /* $@2: %empty  */
+#line 151 "limbaj.y"
+               {
+                     if(currentScope->lookupLocal(*(yyvsp[-4].Str))){
+                                   cout<<"Eroare de semantica: functia '"<<*(yyvsp[-4].Str)<<"' este deja declarata la linia "<<yylineno<<endl;
+                                   errorCount++;
+                              }
+                    else
+                    {
+                         vector<Parameter> params = *(yyvsp[-2].Params);
+
+                         currentScope->addFunction(*(yyvsp[-4].Str), *(yyvsp[-5].Str), params);
+
+                         currentScope = currentScope->createChild("function " + *(yyvsp[-4].Str));
+
+                         for (const auto& p : params) {
+                              currentScope->addVariable(p.name, p.type, "-");
+                         }
+
+                         delete (yyvsp[-5].Str);
+                         delete (yyvsp[-4].Str);
+                         delete (yyvsp[-2].Params);
+                    }
+               }
+#line 1422 "limbaj.tab.c"
+    break;
+
+  case 11: /* decl: TYPE ID LEFTP list_param RIGHTP LEFTB $@2 list RIGHTB  */
+#line 174 "limbaj.y"
+               {
+                   currentScope=currentScope->getParent();
+               }
+#line 1430 "limbaj.tab.c"
+    break;
+
+  case 12: /* $@3: %empty  */
+#line 179 "limbaj.y"
+               {
+                    if(currentScope->lookupLocal(*(yyvsp[0].Str))){
+                                   cout<<"Eroare de semantica: clasa '"<<*(yyvsp[0].Str)<<"' este deja declarata la linia "<<yylineno<<endl;
+                                   errorCount++;
+                              }
+                    else
+                    {
+                         currentScope->addClass(*(yyvsp[0].Str));
+                         currentScope=currentScope->createChild("class "+*(yyvsp[0].Str));
+                    }
+               }
+#line 1446 "limbaj.tab.c"
+    break;
+
+  case 13: /* decl: BCLASS ID $@3 LEFTB class_body RIGHTB ECLASS  */
+#line 191 "limbaj.y"
                {
                     currentScope=currentScope->getParent();
                     delete (yyvsp[-5].Str);
+                    
                }
-#line 1336 "limbaj.tab.c"
+#line 1456 "limbaj.tab.c"
     break;
 
-  case 9: /* list_param: TYPE ID  */
-#line 110 "limbaj.y"
+  case 14: /* decl: ID ID ';'  */
+#line 197 "limbaj.y"
                {
+                    if(currentScope->lookupLocal(*(yyvsp[-1].Str))){
+                         cout<<"Eroare de semantica: obiectul '"<<*(yyvsp[-1].Str)<<"' este deja declarat la linia "<<yylineno<<endl;
+                         errorCount++;
+                    }
+                    else
+                    {
+                         currentScope->addVariable(*(yyvsp[-1].Str),*(yyvsp[-2].Str),"object");
+                         delete (yyvsp[-2].Str);
+                         delete (yyvsp[-1].Str);
+                    }
+               }
+#line 1473 "limbaj.tab.c"
+    break;
+
+  case 15: /* list_param: TYPE ID  */
+#line 212 "limbaj.y"
+               {
+                    //cout << currentScope->getName() << endl;
                     (yyval.Params)=new vector<Parameter>();
                     (yyval.Params)->push_back({*(yyvsp[-1].Str),*(yyvsp[0].Str)});
                     delete (yyvsp[-1].Str);
                     delete (yyvsp[0].Str);
                }
-#line 1347 "limbaj.tab.c"
+#line 1485 "limbaj.tab.c"
     break;
 
-  case 10: /* list_param: list_param COMMA TYPE ID  */
-#line 117 "limbaj.y"
+  case 16: /* list_param: list_param COMMA TYPE ID  */
+#line 220 "limbaj.y"
                {
+                    //cout << currentScope->getName() << endl;
                     (yyval.Params)=(yyvsp[-3].Params);
                     (yyval.Params)->push_back({*(yyvsp[-1].Str),*(yyvsp[0].Str)});
                     delete (yyvsp[-1].Str);
                     delete (yyvsp[0].Str);
                }
-#line 1358 "limbaj.tab.c"
+#line 1497 "limbaj.tab.c"
     break;
 
-  case 13: /* class_member: TYPE ID ';'  */
-#line 130 "limbaj.y"
+  case 19: /* class_member: TYPE ID ';'  */
+#line 234 "limbaj.y"
                {
                     currentScope->addVariable(*(yyvsp[-1].Str),*(yyvsp[-2].Str),"-");
                     delete (yyvsp[-2].Str);
                     delete (yyvsp[-1].Str);
                }
-#line 1368 "limbaj.tab.c"
+#line 1507 "limbaj.tab.c"
     break;
 
-  case 14: /* class_member: TYPE ID LEFTP list_param RIGHTP ';'  */
-#line 137 "limbaj.y"
+  case 20: /* class_member: TYPE ID LEFTP list_param RIGHTP ';'  */
+#line 241 "limbaj.y"
                {
                     vector<Parameter> params=*(yyvsp[-2].Params);
 
                     currentScope->addFunction(*(yyvsp[-4].Str), *(yyvsp[-5].Str), params);
 
-                    SymbolTable* saved=currentScope;
-                    currentScope=currentScope->createChild("function "+*(yyvsp[-4].Str));
+                    /*SymbolTable* saved=currentScope;
+                    currentScope=currentScope->createChild("function "+*$2);
 
                     for(const auto& p : params) {
                          currentScope->addVariable(p.name, p.type, "-");
                     }
-                    currentScope=saved;
+                    currentScope=saved;*/
 
                     delete (yyvsp[-5].Str);
                     delete (yyvsp[-4].Str);
                     delete (yyvsp[-2].Params);
                }
-#line 1390 "limbaj.tab.c"
+#line 1529 "limbaj.tab.c"
     break;
 
-  case 15: /* class_member: acces_specifier TYPE ID ';'  */
-#line 155 "limbaj.y"
+  case 21: /* class_member: acces_specifier TYPE ID ';'  */
+#line 260 "limbaj.y"
                {
+                    currentScope->addVariable(*(yyvsp[-1].Str),*(yyvsp[-2].Str),"-");
                     delete (yyvsp[-2].Str);
                     delete (yyvsp[-1].Str);
                }
-#line 1399 "limbaj.tab.c"
+#line 1539 "limbaj.tab.c"
     break;
 
-  case 16: /* class_member: acces_specifier TYPE ID LEFTP list_param RIGHTP ';'  */
-#line 161 "limbaj.y"
+  case 22: /* class_member: acces_specifier TYPE ID LEFTP list_param RIGHTP ';'  */
+#line 267 "limbaj.y"
                  {
+                    currentScope->addFunction(*(yyvsp[-4].Str), *(yyvsp[-5].Str), *(yyvsp[-2].Params));
                     delete (yyvsp[-5].Str);
                     delete (yyvsp[-4].Str);
                  }
-#line 1408 "limbaj.tab.c"
+#line 1549 "limbaj.tab.c"
     break;
 
-  case 31: /* assign: ID ASSIGN expression  */
-#line 191 "limbaj.y"
+  case 23: /* $@4: %empty  */
+#line 273 "limbaj.y"
+              {
+                    vector<Parameter> params;
+                    currentScope->addFunction(*(yyvsp[-3].Str), *(yyvsp[-4].Str), params);
+                    currentScope=currentScope->createChild("function "+*(yyvsp[-3].Str));
+                    delete (yyvsp[-4].Str);
+                    delete (yyvsp[-3].Str);
+              }
+#line 1561 "limbaj.tab.c"
+    break;
+
+  case 24: /* class_member: acces_specifier TYPE ID LEFTP RIGHTP LEFTB $@4 list RIGHTB  */
+#line 281 "limbaj.y"
+                 {
+                    if(currentScope)
+                         currentScope=currentScope->getParent();
+                 }
+#line 1570 "limbaj.tab.c"
+    break;
+
+  case 25: /* $@5: %empty  */
+#line 286 "limbaj.y"
+              {
+                    vector<Parameter> params = *(yyvsp[-2].Params);
+
+                         currentScope->addFunction(*(yyvsp[-4].Str), *(yyvsp[-5].Str), params);
+
+                         currentScope = currentScope->createChild("function " + *(yyvsp[-4].Str));
+
+                         for (const auto& p : params) {
+                              currentScope->addVariable(p.name, p.type, "-");
+                         }
+                    delete (yyvsp[-5].Str);
+                    delete (yyvsp[-4].Str);
+                    delete (yyvsp[-2].Params);
+              }
+#line 1589 "limbaj.tab.c"
+    break;
+
+  case 26: /* class_member: acces_specifier TYPE ID LEFTP list_param RIGHTP LEFTB $@5 list RIGHTB  */
+#line 301 "limbaj.y"
+                 {
+                    if(currentScope)
+                         currentScope=currentScope->getParent();
+                 }
+#line 1598 "limbaj.tab.c"
+    break;
+
+  case 27: /* class_member: acces_specifier TYPE ID LEFTP RIGHTP ';'  */
+#line 306 "limbaj.y"
+                 {
+                    currentScope->addFunction(*(yyvsp[-3].Str), *(yyvsp[-4].Str), {});
+                    delete (yyvsp[-4].Str);
+                    delete (yyvsp[-3].Str);
+                 }
+#line 1608 "limbaj.tab.c"
+    break;
+
+  case 42: /* assign: ID ASSIGN expression ';'  */
+#line 337 "limbaj.y"
           {
-               delete (yyvsp[-2].Str);
-          }
-#line 1416 "limbaj.tab.c"
-    break;
-
-  case 32: /* declaration: INITIALIZE ID  */
-#line 197 "limbaj.y"
-          {
-               currentScope->addVariable(*(yyvsp[0].Str),"unknown","-");
-               delete (yyvsp[0].Str);
-          }
-#line 1425 "limbaj.tab.c"
-    break;
-
-  case 33: /* function_call: ID LEFTP call_parametres RIGHTP  */
-#line 204 "limbaj.y"
-          {
-               delete (yyvsp[-3].Str);
-          }
-#line 1433 "limbaj.tab.c"
-    break;
-
-  case 34: /* function_call: ID DOT ID LEFTP call_parametres RIGHTP  */
-#line 208 "limbaj.y"
-          {
-                delete (yyvsp[-5].Str);
-                delete (yyvsp[-3].Str);
-          }
-#line 1442 "limbaj.tab.c"
-    break;
-
-  case 37: /* for_statement: BFOR ID FROM expression TO expression DO list EFOR  */
-#line 219 "limbaj.y"
-               {
-                    delete (yyvsp[-7].Str);
+               auto* entry=currentScope->lookup(*(yyvsp[-3].Str));
+               if(!entry){
+                    cout<<"Eroare de semantica: variabila '"<<*(yyvsp[-3].Str)<<"' nedeclarata la linia "<<yylineno<<endl;
+                    errorCount++;
                }
-#line 1450 "limbaj.tab.c"
+               else if(*((yyvsp[-1].Expr)->type) != entry->varType){
+                    cout<<"Eroare de semantica: asignare de tip incompatibil pentru variabila '"<<*(yyvsp[-3].Str)<<"' la linia "<<yylineno<<endl;
+                    cout << "Tip variabila: " << entry->varType << ", tip expresie: " << *((yyvsp[-1].Expr)->type) << endl;
+                    errorCount++;
+               }
+
+               ASTNode* root=new ASTNode(":=", new ASTNode(*(yyvsp[-3].Str)), (yyvsp[-1].Expr)->node);
+               (yyvsp[-1].Expr)->node=nullptr;
+               root->evaluate(currentScope);
+               delete root;
+               delete (yyvsp[-3].Str);
+               freeExpr((yyvsp[-1].Expr));
+          }
+#line 1632 "limbaj.tab.c"
     break;
 
-  case 44: /* expression: STRING_S  */
-#line 234 "limbaj.y"
-                     {delete (yyvsp[0].Str);}
-#line 1456 "limbaj.tab.c"
-    break;
-
-  case 47: /* expression: ID  */
-#line 237 "limbaj.y"
-               {delete (yyvsp[0].Str);}
-#line 1462 "limbaj.tab.c"
-    break;
-
-  case 48: /* expression: ID DOT ID  */
-#line 239 "limbaj.y"
+  case 43: /* assign: ID DOT ID ASSIGN expression ';'  */
+#line 357 "limbaj.y"
+          {
+               SymbolEntry* obj=currentScope->lookup(*(yyvsp[-5].Str));
+               if(!obj)
                {
+                    cout<<"Eroare de semantica: obiectul "<<*(yyvsp[-5].Str)<<" nedeclarat la linia "<<yylineno<<endl;
+                    errorCount++;
+               }
+               else
+               {
+                    SymbolEntry* member=globalScope->lookupMember(obj->varType, *(yyvsp[-3].Str));
+                    if(!member)
+                    {
+                         cout<<"Eroare de semantica: clasa "<<obj->varType<<" nu are niciun membru "<<*(yyvsp[-3].Str)<<" la linia "<<yylineno<<endl;
+                         errorCount++;
+                    }
+                    else if(*((yyvsp[-1].Expr)->type) != member->varType)
+                    {
+                         cout<<"Eroare de semantica: asignare de tip incompatibil pentru membrul "<<*(yyvsp[-3].Str)<<" al clasei "<<obj->varType<<" la linia "<<yylineno<<endl;
+                         errorCount++;
+                    }
+               }
+               delete (yyvsp[-5].Str);
+               delete (yyvsp[-3].Str);
+               freeExpr((yyvsp[-1].Expr));
+          }
+#line 1662 "limbaj.tab.c"
+    break;
+
+  case 44: /* function_call: ID LEFTP call_parametres RIGHTP  */
+#line 388 "limbaj.y"
+      {
+           SymbolEntry* entry = currentScope->lookup(*(yyvsp[-3].Str));
+           if(!entry || entry->kind != SymbolKind::Function){
+                cout<<"Eroare de semantica: functia '"<<*(yyvsp[-3].Str)<<"' nedeclarata la linia "<<yylineno<<endl;
+                errorCount++;
+                (yyval.Str) = new string("error");
+           } else {
+                if(entry->params.size() != (yyvsp[-1].Params)->size()){
+                    cout<<"Eroare de semantica: numar incorect de parametrii pentru functia '"<<*(yyvsp[-3].Str)<<"' la linia "<<yylineno<<endl;
+                    errorCount++;
+                    (yyval.Str) = new string("error");
+                } else {
+                    bool ok = true;
+                    for(size_t i=0; i<entry->params.size(); i++){
+                         if(entry->params[i].type != (*(yyvsp[-1].Params))[i].type){
+                              cout<<"Eroare de semantica: tip de parametru incorect pentru parametrul "<<i+1<<" al functiei '"<<*(yyvsp[-3].Str)<<"' la linia "<<yylineno<<endl;
+                              errorCount++;
+                              ok = false;
+                         }
+                    }
+                    if(ok) (yyval.Str) = new string(entry->returnType);
+                    else (yyval.Str) = new string("error");
+                }
+           }
+           delete (yyvsp[-3].Str);
+           delete (yyvsp[-1].Params);
+      }
+#line 1694 "limbaj.tab.c"
+    break;
+
+  case 45: /* function_call: ID DOT ID LEFTP call_parametres RIGHTP  */
+#line 416 "limbaj.y"
+      {
+           SymbolEntry* obj = currentScope->lookup(*(yyvsp[-5].Str));
+           if(!obj){
+                cout<<"Eroare de semantica: obiectul "<<*(yyvsp[-5].Str)<<" nedeclarat la linia "<<yylineno<<endl;
+                errorCount++;
+                (yyval.Str) = new string("error");
+           } else {
+                SymbolEntry* member = globalScope->lookupMember(obj->varType, *(yyvsp[-3].Str));
+                if(!member || member->kind != SymbolKind::Function){
+                     cout<<"Eroare de semantica: metoda '"<<*(yyvsp[-3].Str)<<"' nedeclarata in clasa "<<obj->varType<<" la linia "<<yylineno<<endl;
+                     errorCount++;
+                     (yyval.Str) = new string("error");
+                } else {
+                     if(member->params.size() != (yyvsp[-1].Params)->size()){
+                          cout<<"Eroare de semantica: numar incorect de parametrii pentru metoda '"<<*(yyvsp[-3].Str)<<"' la linia "<<yylineno<<endl;
+                          errorCount++;
+                          (yyval.Str) = new string("error");
+                     } else {
+                          bool ok = true;
+                          for(size_t i=0;i<member->params.size();i++){
+                               if(member->params[i].type != (*(yyvsp[-1].Params))[i].type){
+                                    cout<<"Eroare de semantica: tip de parametru incorect pentru parametrul "<<i+1<<" al metodei '"<<*(yyvsp[-3].Str)<<"' la linia "<<yylineno<<endl;
+                                    errorCount++;
+                                    ok = false;
+                               }
+                          }
+                          if(ok) (yyval.Str) = new string(member->returnType);
+                          else (yyval.Str) = new string("error");
+                     }
+                }
+           }
+           delete (yyvsp[-5].Str);
+           delete (yyvsp[-3].Str);
+           delete (yyvsp[-1].Params);
+      }
+#line 1734 "limbaj.tab.c"
+    break;
+
+  case 46: /* if_statement: BIF bool_expression THEN statement EIF ';'  */
+#line 454 "limbaj.y"
+               {freeExpr((yyvsp[-4].Expr)); }
+#line 1740 "limbaj.tab.c"
+    break;
+
+  case 47: /* if_statement: BIF bool_expression THEN list ELSE list EIF ';'  */
+#line 456 "limbaj.y"
+               {freeExpr((yyvsp[-6].Expr));}
+#line 1746 "limbaj.tab.c"
+    break;
+
+  case 48: /* for_statement: BFOR ID FROM expression TO expression DO list EFOR ';'  */
+#line 460 "limbaj.y"
+               {
+                    delete (yyvsp[-8].Str);
+                    freeExpr((yyvsp[-6].Expr));
+                    freeExpr((yyvsp[-4].Expr));
+               }
+#line 1756 "limbaj.tab.c"
+    break;
+
+  case 49: /* print_statement: PRINT LEFTP expression RIGHTP ';'  */
+#line 468 "limbaj.y"
+               {
+                    ASTNode* root=new ASTNode("Print", (yyvsp[-2].Expr)->node, nullptr);
+                    (yyvsp[-2].Expr)->node=nullptr;
+                    root->evaluate(currentScope);
+                    delete root;
+                    freeExpr((yyvsp[-2].Expr));
+               }
+#line 1768 "limbaj.tab.c"
+    break;
+
+  case 50: /* print_statement: PRINT LEFTP bool_expression RIGHTP ';'  */
+#line 476 "limbaj.y"
+               {
+                    ASTNode* root=new ASTNode("Print", (yyvsp[-2].Expr)->node, nullptr);
+                    (yyvsp[-2].Expr)->node=nullptr;
+                    root->evaluate(currentScope);
+                    delete root;
+                    freeExpr((yyvsp[-2].Expr));
+               }
+#line 1780 "limbaj.tab.c"
+    break;
+
+  case 51: /* return_statement: RETURN expression ';'  */
+#line 485 "limbaj.y"
+                                       {
+                    SymbolEntry* f=currentScope->getParentFunction();
+                    if(f && f->varType == "void"){
+                         cout<<"Eroare de semantica: return intr-o functie void la linia "<<yylineno<<endl;
+                         errorCount++;
+                    }
+                    freeExpr((yyvsp[-1].Expr));
+                    }
+#line 1793 "limbaj.tab.c"
+    break;
+
+  case 52: /* return_statement: RETURN ';'  */
+#line 493 "limbaj.y"
+                                 {
+                    SymbolEntry* f=currentScope->getParentFunction();
+                    if(f && f->varType != "void"){
+                         cout<<"Eroare de semantica: return fara valoare intr-o functie non-void la linia "<<yylineno<<endl;
+                         errorCount++;
+                         }
+                    }
+#line 1805 "limbaj.tab.c"
+    break;
+
+  case 53: /* call_parametres: expression  */
+#line 502 "limbaj.y"
+                            {
+                    (yyval.Params) = new vector<Parameter>();
+                    Parameter p;
+                    p.type=*((yyvsp[0].Expr)->type);
+                    p.name="";
+                    (yyval.Params)->push_back(p);
+                    freeExpr((yyvsp[0].Expr));
+}
+#line 1818 "limbaj.tab.c"
+    break;
+
+  case 54: /* call_parametres: call_parametres COMMA expression  */
+#line 510 "limbaj.y"
+                                             {
+                    (yyval.Params) = (yyvsp[-2].Params);
+                    Parameter p;
+                    p.type=*((yyvsp[0].Expr)->type);
+                    p.name="";
+                    (yyval.Params)->push_back(p);
+                    freeExpr((yyvsp[0].Expr));
+           }
+#line 1831 "limbaj.tab.c"
+    break;
+
+  case 55: /* expression: INT_NR  */
+#line 520 "limbaj.y"
+                   { (yyval.Expr)=new ExprInfo{new ASTNode(to_string((yyvsp[0].Int))), new string("integer")};}
+#line 1837 "limbaj.tab.c"
+    break;
+
+  case 56: /* expression: FLOAT_NR  */
+#line 521 "limbaj.y"
+                     { (yyval.Expr) = new ExprInfo{new ASTNode(to_string((yyvsp[0].Float))), new string("float")};}
+#line 1843 "limbaj.tab.c"
+    break;
+
+  case 57: /* expression: STRING_S  */
+#line 522 "limbaj.y"
+                     { (yyval.Expr) = new ExprInfo{new ASTNode(*(yyvsp[0].Str)), new string("text")}; delete (yyvsp[0].Str);}
+#line 1849 "limbaj.tab.c"
+    break;
+
+  case 58: /* expression: TRUE  */
+#line 523 "limbaj.y"
+                 { (yyval.Expr) = new ExprInfo{new ASTNode("true"), new string("bool")};}
+#line 1855 "limbaj.tab.c"
+    break;
+
+  case 59: /* expression: FALSE  */
+#line 524 "limbaj.y"
+                  { (yyval.Expr) = new ExprInfo{new ASTNode("false"), new string("bool")};}
+#line 1861 "limbaj.tab.c"
+    break;
+
+  case 60: /* expression: ID  */
+#line 525 "limbaj.y"
+               {
+               if(!currentScope->lookup(*(yyvsp[0].Str))){
+                    cout<<"Eroare de semantica: '"<<*(yyvsp[0].Str)<<"' nedeclarat la linia "<<yylineno<<endl;
+                    errorCount++;
+                    (yyval.Expr) = new ExprInfo{new ASTNode(*(yyvsp[0].Str)), new string("error")};
+               }
+               else{
+                    SymbolEntry* entry=currentScope->lookup(*(yyvsp[0].Str));
+                    (yyval.Expr) = new ExprInfo{new ASTNode(*(yyvsp[0].Str)), new string(entry->varType)};
+               }
+               delete (yyvsp[0].Str);
+               }
+#line 1878 "limbaj.tab.c"
+    break;
+
+  case 61: /* expression: ID DOT ID  */
+#line 538 "limbaj.y"
+               {
+                    SymbolEntry* obj=currentScope->lookup(*(yyvsp[-2].Str));
+                    if(!obj)
+                    {
+                         cout<<"Eroare de semantica: obiectul "<<*(yyvsp[-2].Str)<<" nedeclarat la linia "<<yylineno<<endl;
+                         errorCount++;
+                         (yyval.Expr) = new ExprInfo{new ASTNode("error"), new string("error")};
+                    }
+                    else
+                    {
+                         SymbolEntry* member=globalScope->lookupMember(obj->varType, *(yyvsp[0].Str));
+                         if(!member)
+                         {
+                              cout<<"Eroare de semantica: clasa "<<obj->varType<<" nu are niciun membru "<<*(yyvsp[0].Str)<<" la linia "<<yylineno<<endl;
+                              errorCount++;
+                              (yyval.Expr) = new ExprInfo{new ASTNode("error"), new string("error")};
+                         }
+                         else{
+                              (yyval.Expr) = new ExprInfo{new ASTNode(*(yyvsp[-2].Str)+string(".")+*(yyvsp[0].Str)), new string(member->varType)};
+                         }
+                    }
                     delete (yyvsp[-2].Str);
                     delete (yyvsp[0].Str);
                }
-#line 1471 "limbaj.tab.c"
+#line 1907 "limbaj.tab.c"
     break;
 
-  case 49: /* expression: NEW ID  */
-#line 244 "limbaj.y"
+  case 62: /* expression: NEW ID  */
+#line 563 "limbaj.y"
                {
+                    (yyval.Expr) = new ExprInfo{
+        new ASTNode("new " + *(yyvsp[0].Str)),
+        new string(*(yyvsp[0].Str))
+    };
                     delete (yyvsp[0].Str);
                }
-#line 1479 "limbaj.tab.c"
+#line 1919 "limbaj.tab.c"
+    break;
+
+  case 63: /* expression: expression PLUS expression  */
+#line 571 "limbaj.y"
+                                       {
+               if(*((yyvsp[-2].Expr)->type) != *((yyvsp[0].Expr)->type)) {
+                    cout<<"Eroare de semantica: tipuri incompatibile pentru operatorul '+' la linia "<<yylineno<<endl;
+                    errorCount++;
+                    (yyval.Expr) = new ExprInfo{ new ASTNode("+", (yyvsp[-2].Expr)->node, (yyvsp[0].Expr)->node), new string("error") };               
+               }
+               else {
+                    (yyval.Expr) = new ExprInfo{new ASTNode("+", (yyvsp[-2].Expr)->node, (yyvsp[0].Expr)->node), new string (*((yyvsp[-2].Expr)->type))};
+               }
+               (yyvsp[-2].Expr)->node=nullptr;
+               (yyvsp[0].Expr)->node=nullptr;
+               freeExpr((yyvsp[-2].Expr));
+               freeExpr((yyvsp[0].Expr));
+          }
+#line 1938 "limbaj.tab.c"
+    break;
+
+  case 64: /* expression: expression MINUS expression  */
+#line 585 "limbaj.y"
+                                       {
+               if(*((yyvsp[-2].Expr)->type) != *((yyvsp[0].Expr)->type)){
+                    cout<<"Eroare de semantica: tipuri incompatibile pentru operatorul '-' la linia "<<yylineno<<endl;
+                    errorCount++;
+                    (yyval.Expr) = new ExprInfo{ new ASTNode("-", (yyvsp[-2].Expr)->node, (yyvsp[0].Expr)->node), new string("error") };              
+               }
+               else{
+                    (yyval.Expr) = new ExprInfo{ new ASTNode("-", (yyvsp[-2].Expr)->node, (yyvsp[0].Expr)->node), new string(*((yyvsp[-2].Expr)->type)) };
+               }
+               (yyvsp[-2].Expr)->node=nullptr;
+               (yyvsp[0].Expr)->node=nullptr;
+               freeExpr((yyvsp[-2].Expr));
+               freeExpr((yyvsp[0].Expr));
+          }
+#line 1957 "limbaj.tab.c"
+    break;
+
+  case 65: /* expression: MINUS expression  */
+#line 601 "limbaj.y"
+          { 
+               if(*((yyvsp[0].Expr)->type)!="integer" && *((yyvsp[0].Expr)->type)!="float"){
+                    cout<<"Eroare de semantica: unary '-' pe tip invalid la linia "<<yylineno<<endl;
+                    errorCount++;
+                    (yyval.Expr) = new ExprInfo{ new ASTNode("uminus", (yyvsp[0].Expr)->node, nullptr), new string("error") };
+               }
+               else {
+                    (yyval.Expr)=new ExprInfo{new ASTNode("uminus", (yyvsp[0].Expr)->node, nullptr), new string(*((yyvsp[0].Expr)->type))};
+               }
+               (yyvsp[0].Expr)->node=nullptr;
+               freeExpr((yyvsp[0].Expr));
+          }
+#line 1974 "limbaj.tab.c"
+    break;
+
+  case 66: /* expression: expression MUL expression  */
+#line 613 "limbaj.y"
+                                     {
+               if(*((yyvsp[-2].Expr)->type) != *((yyvsp[0].Expr)->type)){
+                    cout<<"Eroare de semantica: tipuri incompatibile pentru operatorul '*' la linia "<<yylineno<<endl;
+                    errorCount++;
+                    (yyval.Expr) = new ExprInfo{ new ASTNode("*", (yyvsp[-2].Expr)->node, (yyvsp[0].Expr)->node), new string("error") };               
+               }
+               else{
+                              (yyval.Expr) = new ExprInfo{ new ASTNode("*", (yyvsp[-2].Expr)->node, (yyvsp[0].Expr)->node), new string(*((yyvsp[-2].Expr)->type)) };
+               }
+               (yyvsp[-2].Expr)->node=nullptr;
+               (yyvsp[0].Expr)->node=nullptr;
+               freeExpr((yyvsp[-2].Expr));
+               freeExpr((yyvsp[0].Expr));
+          }
+#line 1993 "limbaj.tab.c"
+    break;
+
+  case 67: /* expression: expression DIV expression  */
+#line 627 "limbaj.y"
+                                     {
+               if(*((yyvsp[-2].Expr)->type) != *((yyvsp[0].Expr)->type)){
+                    cout<<"Eroare de semantica: tipuri incompatibile pentru operatorul '/' la linia "<<yylineno<<endl;
+                    errorCount++;
+                    (yyval.Expr) = new ExprInfo{ new ASTNode("/", (yyvsp[-2].Expr)->node, (yyvsp[0].Expr)->node), new string("error") };     
+               }
+               else {
+                    (yyval.Expr) = new ExprInfo{ new ASTNode("/", (yyvsp[-2].Expr)->node, (yyvsp[0].Expr)->node), new string(*((yyvsp[-2].Expr)->type)) };    
+               }
+               (yyvsp[-2].Expr)->node=nullptr;
+               (yyvsp[0].Expr)->node=nullptr;
+               freeExpr((yyvsp[-2].Expr));
+               freeExpr((yyvsp[0].Expr));
+          }
+#line 2012 "limbaj.tab.c"
+    break;
+
+  case 68: /* expression: LEFTP expression RIGHTP  */
+#line 641 "limbaj.y"
+                                    { (yyval.Expr) =(yyvsp[-1].Expr);}
+#line 2018 "limbaj.tab.c"
+    break;
+
+  case 69: /* expression: NOT expression  */
+#line 662 "limbaj.y"
+                           { 
+               if(*((yyvsp[0].Expr)->type) != "bool"){
+                    cout<<"Eroare de semantica: 'not' pe tip invalid la linia "<<yylineno<<endl;
+                    errorCount++;
+                    (yyval.Expr) = new ExprInfo{ new ASTNode("not", (yyvsp[0].Expr)->node, nullptr), new string("error") };
+               } else {
+                    (yyval.Expr) = new ExprInfo{ new ASTNode("not", (yyvsp[0].Expr)->node, nullptr), new string("bool") };
+               }
+               (yyvsp[0].Expr)->node=nullptr;
+               freeExpr((yyvsp[0].Expr));
+          }
+#line 2034 "limbaj.tab.c"
+    break;
+
+  case 70: /* while_statement: BWHILE bool_expression DO list EWHILE  */
+#line 676 "limbaj.y"
+               {freeExpr((yyvsp[-3].Expr));}
+#line 2040 "limbaj.tab.c"
+    break;
+
+  case 71: /* bool_expression: expression EQ expression  */
+#line 680 "limbaj.y"
+               {
+                    (yyval.Expr)=new ExprInfo{new ASTNode("==", (yyvsp[-2].Expr)->node, (yyvsp[0].Expr)->node), new string("bool")};
+                    (yyvsp[-2].Expr)->node=nullptr;
+                    (yyvsp[0].Expr)->node=nullptr;
+                    freeExpr((yyvsp[-2].Expr));
+                    freeExpr((yyvsp[0].Expr));
+               }
+#line 2052 "limbaj.tab.c"
+    break;
+
+  case 72: /* bool_expression: expression NEQ expression  */
+#line 688 "limbaj.y"
+               {
+                    (yyval.Expr)=new ExprInfo{new ASTNode("!=", (yyvsp[-2].Expr)->node, (yyvsp[0].Expr)->node), new string("bool")};
+                    (yyvsp[-2].Expr)->node=nullptr;
+                    (yyvsp[0].Expr)->node=nullptr;
+                    freeExpr((yyvsp[-2].Expr));
+                    freeExpr((yyvsp[0].Expr));
+               }
+#line 2064 "limbaj.tab.c"
+    break;
+
+  case 73: /* bool_expression: expression LT expression  */
+#line 696 "limbaj.y"
+               {
+                    (yyval.Expr)=new ExprInfo{new ASTNode("<", (yyvsp[-2].Expr)->node, (yyvsp[0].Expr)->node), new string("bool")};
+                    (yyvsp[-2].Expr)->node=nullptr;
+                    (yyvsp[0].Expr)->node=nullptr;
+                    freeExpr((yyvsp[-2].Expr));
+                    freeExpr((yyvsp[0].Expr));
+               }
+#line 2076 "limbaj.tab.c"
+    break;
+
+  case 74: /* bool_expression: expression LE expression  */
+#line 704 "limbaj.y"
+               {
+                    (yyval.Expr)=new ExprInfo{new ASTNode("<=", (yyvsp[-2].Expr)->node, (yyvsp[0].Expr)->node), new string("bool")};
+                    (yyvsp[-2].Expr)->node=nullptr;
+                    (yyvsp[0].Expr)->node=nullptr;
+                    freeExpr((yyvsp[-2].Expr));
+                    freeExpr((yyvsp[0].Expr));
+               }
+#line 2088 "limbaj.tab.c"
+    break;
+
+  case 75: /* bool_expression: expression GT expression  */
+#line 712 "limbaj.y"
+               {
+                    (yyval.Expr)=new ExprInfo{new ASTNode(">", (yyvsp[-2].Expr)->node, (yyvsp[0].Expr)->node), new string("bool")};
+                    (yyvsp[-2].Expr)->node=nullptr;
+                    (yyvsp[0].Expr)->node=nullptr;
+                    freeExpr((yyvsp[-2].Expr));
+                    freeExpr((yyvsp[0].Expr));
+               }
+#line 2100 "limbaj.tab.c"
+    break;
+
+  case 76: /* bool_expression: expression GE expression  */
+#line 720 "limbaj.y"
+               {
+                    (yyval.Expr)=new ExprInfo{new ASTNode(">=", (yyvsp[-2].Expr)->node, (yyvsp[0].Expr)->node), new string("bool")};
+                    (yyvsp[-2].Expr)->node=nullptr;
+                    (yyvsp[0].Expr)->node=nullptr;
+                    freeExpr((yyvsp[-2].Expr));
+                    freeExpr((yyvsp[0].Expr));
+               }
+#line 2112 "limbaj.tab.c"
+    break;
+
+  case 77: /* bool_expression: bool_expression AND bool_expression  */
+#line 728 "limbaj.y"
+               {
+                    (yyval.Expr)=new ExprInfo{new ASTNode("and", (yyvsp[-2].Expr)->node, (yyvsp[0].Expr)->node), new string("bool")};
+                    (yyvsp[-2].Expr)->node=nullptr;
+                    (yyvsp[0].Expr)->node=nullptr;
+                    freeExpr((yyvsp[-2].Expr));
+                    freeExpr((yyvsp[0].Expr));
+               }
+#line 2124 "limbaj.tab.c"
+    break;
+
+  case 78: /* bool_expression: bool_expression OR bool_expression  */
+#line 736 "limbaj.y"
+               {
+                    (yyval.Expr)=new ExprInfo{new ASTNode("or", (yyvsp[-2].Expr)->node, (yyvsp[0].Expr)->node), new string("bool")};
+                    (yyvsp[-2].Expr)->node=nullptr;
+                    (yyvsp[0].Expr)->node=nullptr;
+                    freeExpr((yyvsp[-2].Expr));
+                    freeExpr((yyvsp[0].Expr));
+               }
+#line 2136 "limbaj.tab.c"
+    break;
+
+  case 79: /* bool_expression: NOT bool_expression  */
+#line 744 "limbaj.y"
+               {
+                    (yyval.Expr)=new ExprInfo{new ASTNode("not", (yyvsp[0].Expr)->node, nullptr), new string("bool")};
+                    (yyvsp[0].Expr)->node=nullptr;
+                    freeExpr((yyvsp[0].Expr));
+               }
+#line 2146 "limbaj.tab.c"
+    break;
+
+  case 80: /* bool_expression: LEFTP bool_expression RIGHTP  */
+#line 750 "limbaj.y"
+               {
+                    (yyval.Expr)=(yyvsp[-1].Expr);
+               }
+#line 2154 "limbaj.tab.c"
     break;
 
 
-#line 1483 "limbaj.tab.c"
+#line 2158 "limbaj.tab.c"
 
       default: break;
     }
@@ -1672,7 +2347,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 274 "limbaj.y"
+#line 755 "limbaj.y"
 
 void yyerror(const char * s){
      cout << "error:" << s << " at line: " << yylineno << endl;
@@ -1692,4 +2367,4 @@ int main(int argc, char** argv){
 
      delete globalScope;
      return (errorCount == 0) ? 0 : 1;
-} 
+}

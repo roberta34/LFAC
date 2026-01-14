@@ -5,7 +5,6 @@ private integer y;
 }
 end_class
 begin_main
-initialize x;
 x <- 10;
 end_main
 end_program

@@ -54,5 +54,10 @@ class SymbolTable {
         void addClass(const string& name);
 
         void printAll(ostream& out, int indent=0) const;
+        SymbolEntry* lookup(const string& name);
+        SymbolEntry* lookupLocal(const string& name);
+        SymbolEntry* lookupClass(const string& class_name);
+        SymbolEntry* lookupMember(const string& class_name, const string& member_name);
+        SymbolEntry* getParentFunction();
 
 };
