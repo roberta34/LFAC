@@ -53,12 +53,12 @@ The implementation respects strict syntactic and semantic constraints and models
 ## Symbol Table Structure
 
    Each symbol table is implemented as a class and containts:
-        - table name
-        - pointer to parent scope
-        - list of locally defined identifiers
+   - table name
+   - pointer to parent scope
+   - list of locally defined identifiers
     Stored Information
-        - **variables** -> name, type, value
-        - **functions** -> name, return type, parameters
+    - **variables** -> name, type, value
+    - **functions** -> name, return type, parameters
 
 ## Semantic Analysis
-    The interprer 
+    
