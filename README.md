@@ -51,6 +51,7 @@ The implementation respects strict syntactic and semantic constraints and models
         - introduced by each class definition
 
 ## Symbol Table Structure
+
    Each symbol table is implemented as a class and containts:
         - table name
         - pointer to parent scope
