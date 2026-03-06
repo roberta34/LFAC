@@ -115,4 +115,64 @@ The implementation respects strict syntactic and semantic constraints and models
    - Flex & Bison
    - Shell
    
+## Download and Setup Guide
+### 1. Clone the Repository
+````
+git clone [https://github.com/roberta34/My-Programming-Language.git](https://github.com/roberta34/My-Programming-Language.git)
+cd My-Programming-Language
+````
+### 2. Install Required Dependencies
+Make sure the following tools are installed on your system:
+   - g++
+   - flex
+   - bison
+   - bash
+On Ubuntu/WSL you can install them with:
+````
+sudo apt update
+sudo apt install build-essential flex bison
+````
+Verify installation:
+````
+g++ --version
+flex --version
+bison --version
+````
+### 3. Compile the Project
+The project includes a helper script for compilation.
+Run:
+````
+chmod +x compile.sh
+./compile.sh
+````
+This script will:
+   - generate the lexer from limbaj.l
+   - generate the parser from limbaj.y
+   - compile all .cpp sources
+   - produce the executable limbaj
 
+### 4. Run the Language Interpreter
+After compilation, run the interpreter using:
+````
+./runtests.sh
+````
+
+### 5. Output Files
+During execution the program generates:
+   - tables.txt - contains all symbol tables generated during execution
+   - console output - results of *Print(expr)* calls
+   - error messages - semantic or syntax errors
+
+## Project Structure
+````
+.
+├── limbaj.l          # lexical analyzer (Flex)
+├── limbaj.y          # grammar and parser (Bison)
+├── ASTnode.cpp/hpp   # AST implementation
+├── symbol_table.cpp/hpp
+├── valoare.hpp       # typed value wrapper
+├── compile.sh        # compilation script
+├── runtests.sh       # testing script
+├── tables.txt        # generated symbol tables
+└── tests/            # example programs
+````
